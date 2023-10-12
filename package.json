@@ -1,5 +1,5 @@
 {
-  "name": "cafeplugguardian-server",
+  "name": "cafe_plug_guardian_server",
   "version": "0.0.0",
   "description": "CafePlugGuardian backend server",
   "main": "src/app.ts",
