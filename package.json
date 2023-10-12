@@ -2,15 +2,20 @@
   "name": "cafeplugguardian-server",
   "version": "0.0.0",
   "description": "CafePlugGuardian backend server",
-  "main": "app.ts",
+  "main": "src/app.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon --watch \\\"*.ts\\\" --exec \\\"ts-node\\\" src/app.ts"
   },
   "author": "keylime7",
   "license": "MIT",
   "dependencies": {
     "@types/express": "^4.17.19",
     "express": "^4.18.2",
+    "ts-node": "^10.9.1",
     "typescript": "^5.2.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
   }
 }
