@@ -4,8 +4,8 @@
   "description": "CafePlugGuardian backend server",
   "main": "src/app.ts",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development nodemon --watch *.ts --exec ts-node src/app.ts",
-    "test": "cross-env NODE_ENV=test nodemon --watch *.ts --exec ts-node src/app.ts"
+    "dev": "cross-env NODE_ENV=development nodemon --watch src --exec ts-node src/app.ts",
+    "test": "cross-env NODE_ENV=test nodemon --watch src --exec ts-node src/app.ts"
   },
   "author": "keylime7",
   "license": "MIT",
