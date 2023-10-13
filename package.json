@@ -4,13 +4,14 @@
   "description": "CafePlugGuardian backend server",
   "main": "src/app.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon --watch \"*.ts\" --exec \"ts-node\" src/app.ts"
+    "dev": "cross-env NODE_ENV=development nodemon --watch *.ts --exec ts-node src/app.ts",
+    "test": "cross-env NODE_ENV=test nodemon --watch *.ts --exec ts-node src/app.ts"
   },
   "author": "keylime7",
   "license": "MIT",
   "dependencies": {
     "@types/express": "^4.17.19",
+    "cross-env": "^7.0.3",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "ts-node": "^10.9.1",
