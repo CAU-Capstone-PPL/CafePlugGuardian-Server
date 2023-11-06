@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 function connectDatabase() {
   const mongodbURI: string | undefined = process.env.MONGODB_URI;

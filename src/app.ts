@@ -1,6 +1,6 @@
-import configureEnvironment from "./config/environment";
-import connectDatabase from "./config/database";
-import configureHTTPS from "./config/https";
+import configureEnvironment from './config/environment';
+import connectDatabase from './config/database';
+import configureHTTPS from './config/https';
 
 configureEnvironment();
 connectDatabase();

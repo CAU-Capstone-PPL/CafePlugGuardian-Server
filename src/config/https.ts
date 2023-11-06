@@ -1,6 +1,6 @@
-import fs from "fs";
-import https from "https";
-import configureExpressApp from "./expressApp";
+import fs from 'fs';
+import https from 'https';
+import configureExpressApp from './expressApp';
 
 function configureHTTPS() {
   const privateKeyPath: string | undefined = process.env.PRIVATE_KEY_PATH;
