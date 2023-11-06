@@ -1,5 +1,5 @@
 import express from 'express';
-import indexRouter from '../routes/index';
+import apiRouter from '../routes/api';
 
 function configureExpressApp() {
   const app = express();
@@ -8,7 +8,7 @@ function configureExpressApp() {
   app.use(express.json());
 
   //라우터
-  app.use('/', indexRouter);
+  app.use('/api', apiRouter);
 
   return app;
 }
