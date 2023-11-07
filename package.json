@@ -5,18 +5,21 @@
   "main": "src/app.ts",
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon --watch src --exec ts-node src/app.ts",
-    "test": "cross-env NODE_ENV=test nodemon --watch src --exec ts-node src/app.ts"
+    "test": "cross-env NODE_ENV=test nodemon --watch src --exec ts-node src/app.ts",
+    "generate-secret": "ts-node test/jwtGenerator.ts"
   },
   "author": "keylime7",
   "license": "MIT",
   "dependencies": {
     "@types/cors": "^2.8.16",
     "@types/express": "^4.17.19",
+    "@types/jsonwebtoken": "^9.0.4",
     "@types/method-override": "^0.0.34",
     "cors": "^2.8.5",
     "cross-env": "^7.0.3",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
     "method-override": "^3.0.0",
     "mongoose": "^7.6.2",
     "ts-node": "^10.9.1",
