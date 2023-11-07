@@ -1,4 +1,4 @@
-import User from "../../models/User";
+import users from "../../models/users";
 
 interface Ijwt {
   'Authorization': string
@@ -7,7 +7,17 @@ interface Ijwt {
 class UserService {
   async verifyLogin(userId: string, password: string): Promise<Ijwt | void> {
     try {
-      const user = await User.findOne({userId: userId});
+      /*
+      const test = new users({
+        userId: "testidid",
+        password: "12345",
+        userName: "testName"
+      });
+
+      await test.save();
+      */
+
+      const user = await users.findOne({userId: userId});
 
       if (user && user.password === password) {
         let token: Ijwt = {'Authorization': 'test'};

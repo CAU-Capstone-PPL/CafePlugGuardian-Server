@@ -5,8 +5,8 @@ import UserService from '../../services/user/userService';
 
 const router = Router();
 
-router.get('/login', async (req: Request, res: Response) => {
-  const { userId, password } = req.params;
+router.post('/login', async (req: Request, res: Response) => {
+  const { userId, password } = req.body;
 
   try {
     const loginResponse = await UserService.verifyLogin(userId, password);
