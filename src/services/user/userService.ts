@@ -16,7 +16,7 @@ class UserService {
         return;
       }
     } catch (error) {
-      throw new Error(`로그인 검증에 실패했습니다: ${error}`);
+      throw error;
     }
   }
 }
