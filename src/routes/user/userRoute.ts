@@ -6,10 +6,10 @@ import UserService from '../../services/user/userService';
 const router = Router();
 
 router.post('/login', async (req: Request, res: Response) => {
-  const { userId, password } = req.body;
+  const { userId, userPw } = req.body;
 
   try {
-    const loginResponse = await UserService.verifyLogin(userId, password);
+    const loginResponse = await UserService.verifyLogin(userId, userPw);
 
     if (loginResponse) {
       return res.status(200).json(response(BaseResponseStatus.LOGIN_SUCCESS, loginResponse));
@@ -19,6 +19,16 @@ router.post('/login', async (req: Request, res: Response) => {
   } catch (error) {
     console.error(error);
     res.status(500).json(response(BaseResponseStatus.ERROR));
+  }
+});
+
+router.post('/singUp', async (req: Request, res: Response) => {
+  const { userId, userPw, userName } = req.body;
+
+  try {
+
+  } catch (error) {
+
   }
 });
 
