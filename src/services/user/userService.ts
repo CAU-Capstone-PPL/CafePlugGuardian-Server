@@ -1,44 +1,34 @@
 import users from "../../models/users";
-
-interface Ijwt {
-  'Authorization': string
-}
+import response from "../../helpers/response";
+import BaseResponseStatus from "../../helpers/baseResponseStatus";
 
 class UserService {
-  async verifyLogin(userId: string, userPw: string): Promise<Ijwt | void> {
-    try {
-      /*
-      const test = new users({
-        userId: "testidid",
-        password: "12345",
-        userName: "testName"
-      });
+  async verifyLogin(userId: string, userPw: string) {
+    const user = await users.findOne({ userId: userId });
 
-      await test.save();
-      */
-
-      const user = await users.findOne({userId: userId});
-
-      if (user && user.userPw === userPw) {
-        let token: Ijwt = {'Authorization': 'test'};
-        return token;
-      } else {
-        return;
-      }
-    } catch (error) {
-      throw error;
+    if (user && user.userPw === userPw) {
+      return response(BaseResponseStatus.LOGIN_SUCCESS,
+        { 'Authorization': 'test' }
+      );
+    } else {
+      return response(BaseResponseStatus.LOGIN_FAIL);
     }
   }
 
   async signUp(userId: string, userPw: string, userName: string) {
-    try {
-      const existingUser = await users.findOne({ userId });
-      if(existingUser) {
-        return;
-      }
-    } catch (error) {
-      throw error;
+    const existingUser = await users.findOne({ userId });
+    if(existingUser) {
+      return response(BaseResponseStatus.SIGNUP_DUPLICATE);
     }
+
+    const user = new users({
+      userId: userId,
+      userPw: userPw,
+      userName: userName
+    });
+    await user.save();
+
+    return response(BaseResponseStatus.SIGNUP_SUCCESS);
   }
 }
 

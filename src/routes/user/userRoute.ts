@@ -1,35 +1,31 @@
 import { Request, Response, Router } from 'express';
-import response from '../../helpers/response';
-import BaseResponseStatus from '../../helpers/baseResponseStatus';
+import wrapAsync from '../../helpers/wrapFunction';
 import UserService from '../../services/user/userService';
 
 const router = Router();
 
-router.post('/login', async (req: Request, res: Response) => {
+router.post('/login', wrapAsync(async (req: Request, res: Response) => {
   const { userId, userPw } = req.body;
 
-  try {
-    const loginResponse = await UserService.verifyLogin(userId, userPw);
+  const loginResponse = await UserService.verifyLogin(userId, userPw);
 
-    if (loginResponse) {
-      return res.status(200).json(response(BaseResponseStatus.LOGIN_SUCCESS, loginResponse));
-    } else {
-      return res.status(400).json(response(BaseResponseStatus.LOGIN_FAIL));
-    }
-  } catch (error) {
-    console.error(error);
-    res.status(500).json(response(BaseResponseStatus.ERROR));
+  if (loginResponse.success) {
+    return res.status(200).json(loginResponse);
+  } else {
+    return res.status(400).json(loginResponse);
   }
-});
+}));
 
-router.post('/singUp', async (req: Request, res: Response) => {
+router.post('/singUp',wrapAsync(async (req: Request, res: Response) => {
   const { userId, userPw, userName } = req.body;
 
-  try {
+  const signUpResponse = await  UserService.signUp(userId, userPw, userName);
 
-  } catch (error) {
-
+  if (signUpResponse.success) {
+    return res.status(200).json(signUpResponse);
+  } else {
+    return res.status(400).json(signUpResponse);
   }
-});
+}));
 
 export default router;
