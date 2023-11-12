@@ -16,10 +16,10 @@ router.post('/login', wrapAsync(async (req: Request, res: Response) => {
   }
 }));
 
-router.post('/singUp',wrapAsync(async (req: Request, res: Response) => {
+router.post('/signUp',wrapAsync(async (req: Request, res: Response) => {
   const { userId, userPw, userName } = req.body;
 
-  const signUpResponse = await  UserService.signUp(userId, userPw, userName);
+  const signUpResponse = await UserService.signUp(userId, userPw, userName);
 
   if (signUpResponse.success) {
     return res.status(200).json(signUpResponse);
