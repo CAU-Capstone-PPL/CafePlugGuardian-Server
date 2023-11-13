@@ -1,8 +1,11 @@
 import { Request, Response, Router } from 'express';
+import CafeRoute from './cafe/cafeRoute';
 import wrapAsync from '../../helpers/wrapFunction';
 import UserService from '../../services/user/userService';
 
 const router = Router();
+
+router.use('/:userId/cafe', CafeRoute);
 
 router.post('/login', wrapAsync(async (req: Request, res: Response) => {
   const { userId, userPw } = req.body;
