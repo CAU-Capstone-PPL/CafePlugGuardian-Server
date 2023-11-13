@@ -20,6 +20,16 @@ class PlugService {
     };
     return response(BaseResponseStatus.SUCCESS, plugInfo);
   }
+
+  async togglePlug(plugId: number, toggle: boolean) {
+    //toggle true: turn on, false: turn off
+    if (toggle) {
+      //mqtt로 toggle on 하는 코드
+    } else {
+      //mqtt로 toggle off 하는 코드
+    }
+    return response(BaseResponseStatus.SUCCESS);
+  }
 }
 
 export default new PlugService();
