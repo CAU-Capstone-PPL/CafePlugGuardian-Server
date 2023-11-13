@@ -1,7 +1,7 @@
-import users from "../../models/users";
-import response from "../../helpers/response";
-import BaseResponseStatus from "../../helpers/baseResponseStatus";
-import jwt from "jsonwebtoken";
+import users from '../../models/users';
+import response from '../../helpers/response';
+import BaseResponseStatus from '../../helpers/baseResponseStatus';
+import jwt from 'jsonwebtoken';
 
 class UserService {
   async verifyLogin(userId: string, userPw: string) {
