@@ -12,6 +12,6 @@ const cafeScheme: Schema = new Schema<ICafe>({
   cafeName: { type: String, required: true }
 });
 
-const cafes = model<ICafe>('cafes', cafeScheme);
+const Cafes = model<ICafe>('cafes', cafeScheme);
 
-export default cafes;
+export default Cafes;

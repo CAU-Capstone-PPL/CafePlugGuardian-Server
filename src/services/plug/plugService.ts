@@ -1,10 +1,10 @@
-import plugs from '../../models/plugs';
+import Plugs from '../../models/plugs';
 import response from '../../helpers/response';
 import BaseResponseStatus from '../../helpers/baseResponseStatus';
 
 class PlugService {
   async newPlug() {
-    const lastPlug = await plugs.findOne().sort({ plugId: -1 });
+    const lastPlug = await Plugs.findOne().sort({ plugId: -1 });
     let plugId;
 
     if (lastPlug) {
@@ -13,7 +13,7 @@ class PlugService {
       plugId = 1;
     }
 
-    const plug = new plugs({
+    const plug = new Plugs({
       plugId: plugId,
       topic: `plug_${plugId}`
     });
@@ -23,7 +23,7 @@ class PlugService {
   }
 
   async getPlugInfo(plugId: number) {
-    const plug = await plugs.findOne({ plugId: plugId });
+    const plug = await Plugs.findOne({ plugId: plugId });
 
     if (!plug) {
       return response(BaseResponseStatus.ERROR);

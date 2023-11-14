@@ -16,6 +16,6 @@ const plugScheme: Schema = new Schema<IPlug>({
   plugName: { type: String }
 });
 
-const plugs = model<IPlug>('plugs', plugScheme);
+const Plugs = model<IPlug>('plugs', plugScheme);
 
-export default plugs;
+export default Plugs;

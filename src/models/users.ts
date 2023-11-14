@@ -12,6 +12,6 @@ const userScheme: Schema = new Schema<IUser>({
   userName: { type: String, required: true },
 });
 
-const users = model<IUser>('users', userScheme);
+const Users = model<IUser>('users', userScheme);
 
-export default users;
+export default Users;

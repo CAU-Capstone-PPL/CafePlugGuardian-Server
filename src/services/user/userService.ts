@@ -1,11 +1,11 @@
-import users from '../../models/users';
+import Users from '../../models/users';
 import response from '../../helpers/response';
 import BaseResponseStatus from '../../helpers/baseResponseStatus';
 import jwt from 'jsonwebtoken';
 
 class UserService {
   async verifyLogin(userId: string, userPw: string) {
-    const user = await users.findOne({ userId: userId });
+    const user = await Users.findOne({ userId: userId });
 
     if (user && user.userPw === userPw) {
       const secretKey: string | undefined = process.env.SECRET_KEY;
@@ -31,12 +31,12 @@ class UserService {
   }
 
   async signUp(userId: string, userPw: string, userName: string) {
-    const existingUser = await users.findOne({ userId });
+    const existingUser = await Users.findOne({ userId });
     if(existingUser) {
       return response(BaseResponseStatus.SIGNUP_DUPLICATE);
     }
 
-    const user = new users({
+    const user = new Users({
       userId: userId,
       userPw: userPw,
       userName: userName
