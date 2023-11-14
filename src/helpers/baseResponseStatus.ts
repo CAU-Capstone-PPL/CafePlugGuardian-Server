@@ -14,7 +14,10 @@ const BaseResponseStatus: any = {
 
   //회원가입
   SIGNUP_SUCCESS: { success: true, message: '회원가입 성공'},
-  SIGNUP_DUPLICATE: { success: false, message: '이미 존재하는 아이디입니다.' }
+  SIGNUP_DUPLICATE: { success: false, message: '이미 존재하는 아이디입니다.' },
+
+  //플러그
+  UNKNOWN_PLUG: { success: false, message: '존재하지 않은 플러그입니다.' }
 };
 
 export default BaseResponseStatus;

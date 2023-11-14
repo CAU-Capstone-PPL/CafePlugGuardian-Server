@@ -11,6 +11,19 @@ router.post('/', wrapAsync(async (req: Request, res: Response) => {
   return res.status(200).json(newPlugResponse);
 }));
 
+router.patch('/:plugId', wrapAsync(async (req: Request, res: Response) => {
+  const plugId = Number(req.params.plugId);
+  const { userId, cafeId } = req.body;
+
+  const connectPlugResponse = await PlugService.connectPlug(plugId, userId, cafeId);
+
+  if (connectPlugResponse.success) {
+    return res.status(200).json(connectPlugResponse);
+  } else {
+    return res.status(400).json(connectPlugResponse);
+  }
+}));
+
 router.get('/:plugId/info', wrapAsync(async (req: Request, res: Response) => {
   const plugId = Number(req.params.plugId);
 
