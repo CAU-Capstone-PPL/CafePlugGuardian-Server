@@ -3,6 +3,25 @@ import response from '../../helpers/response';
 import BaseResponseStatus from '../../helpers/baseResponseStatus';
 
 class PlugService {
+  async newPlug() {
+    const lastPlug = await plugs.findOne().sort({ plugId: -1 });
+    let plugId;
+
+    if (lastPlug) {
+      plugId = lastPlug.plugId + 1;
+    } else {
+      plugId = 1;
+    }
+
+    const plug = new plugs({
+      plugId: plugId,
+      topic: `plug_${plugId}`
+    });
+    await plug.save();
+
+    return response(BaseResponseStatus.SUCCESS, plug);
+  }
+
   async getPlugInfo(plugId: number) {
     const plug = await plugs.findOne({ plugId: plugId });
 

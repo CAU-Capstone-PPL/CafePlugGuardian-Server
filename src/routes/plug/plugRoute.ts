@@ -4,6 +4,13 @@ import PlugService from '../../services/plug/plugService';
 
 const router = Router();
 
+router.post('/', wrapAsync(async (req: Request, res: Response) => {
+  //새로 생산된 스마트 플러그를 db에 저장하는 api, 프론트에서 사용 x
+  const newPlugResponse = await PlugService.newPlug();
+
+  return res.status(200).json(newPlugResponse);
+}));
+
 router.get('/:plugId/info', wrapAsync(async (req: Request, res: Response) => {
   const plugId = Number(req.params.plugId);
 
