@@ -5,13 +5,7 @@ import BaseResponseStatus from '../../helpers/baseResponseStatus';
 class PlugService {
   async newPlug() {
     const lastPlug = await Plugs.findOne().sort({ plugId: -1 });
-    let plugId;
-
-    if (lastPlug) {
-      plugId = lastPlug.plugId + 1;
-    } else {
-      plugId = 1;
-    }
+    const plugId = lastPlug ? lastPlug.plugId + 1 : 1;
 
     const plug = new Plugs({
       plugId: plugId,

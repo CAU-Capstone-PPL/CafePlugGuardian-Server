@@ -4,7 +4,7 @@ import BaseResponseStatus from '../../../helpers/baseResponseStatus';
 
 class CafeService {
   async addCafe(userId: number, cafeName: string) {
-    const lastCafe = await Cafes.findOne({ userId }).sort({ cafeId: -1});
+    const lastCafe = await Cafes.findOne({ userId: userId }).sort({ cafeId: -1 });
     const cafeId = lastCafe ? lastCafe.cafeId + 1 : 1;
 
     const cafe = new Cafes({

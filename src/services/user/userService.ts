@@ -4,8 +4,8 @@ import BaseResponseStatus from '../../helpers/baseResponseStatus';
 import jwt from 'jsonwebtoken';
 
 class UserService {
-  async verifyLogin(userId: string, userPw: string) {
-    const user = await Users.findOne({ userId: userId });
+  async verifyLogin(userAccount: string, userPw: string) {
+    const user = await Users.findOne({ userAccount: userAccount });
 
     if (user && user.userPw === userPw) {
       const secretKey: string | undefined = process.env.SECRET_KEY;
@@ -16,6 +16,7 @@ class UserService {
       const token = jwt.sign(
         {
           userId: user.userId,
+          userAccount: user.userAccount,
           userName: user.userName
         },
         secretKey,
@@ -23,21 +24,30 @@ class UserService {
       );
 
       return response(BaseResponseStatus.LOGIN_SUCCESS,
-        { 'Authorization': token }
+        {
+          'Authorization': token,
+          'userId': user.userId,
+          'userAccount': user.userAccount,
+          'userName': user.userName
+        }
       );
     } else {
       return response(BaseResponseStatus.LOGIN_FAIL);
     }
   }
 
-  async signUp(userId: string, userPw: string, userName: string) {
-    const existingUser = await Users.findOne({ userId });
+  async signUp(userAccount: string, userPw: string, userName: string) {
+    const existingUser = await Users.findOne({ userAccount: userAccount });
     if(existingUser) {
       return response(BaseResponseStatus.SIGNUP_DUPLICATE);
     }
 
+    const lastUser = await Users.findOne().sort({ userId: -1 });
+    const userId = lastUser ? lastUser.userId + 1 : 1;
+
     const user = new Users({
       userId: userId,
+      userAccount: userAccount,
       userPw: userPw,
       userName: userName
     });

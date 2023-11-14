@@ -8,9 +8,9 @@ const router = Router();
 router.use('/:userId/cafe', CafeRoute);
 
 router.post('/login', wrapAsync(async (req: Request, res: Response) => {
-  const { userId, userPw } = req.body;
+  const { userAccount, userPw } = req.body;
 
-  const loginResponse = await UserService.verifyLogin(userId, userPw);
+  const loginResponse = await UserService.verifyLogin(userAccount, userPw);
 
   if (loginResponse.success) {
     return res.status(200).json(loginResponse);
@@ -20,9 +20,9 @@ router.post('/login', wrapAsync(async (req: Request, res: Response) => {
 }));
 
 router.post('/signUp',wrapAsync(async (req: Request, res: Response) => {
-  const { userId, userPw, userName } = req.body;
+  const { userAccount, userPw, userName } = req.body;
 
-  const signUpResponse = await UserService.signUp(userId, userPw, userName);
+  const signUpResponse = await UserService.signUp(userAccount, userPw, userName);
 
   if (signUpResponse.success) {
     return res.status(200).json(signUpResponse);
