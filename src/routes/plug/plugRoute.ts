@@ -36,7 +36,7 @@ router.get('/:plugId/info', wrapAsync(async (req: Request, res: Response) => {
   }
 }));
 
-router.put('/:plugId/turnOn', wrapAsync(async (req: Request, res: Response)=> {
+router.patch('/:plugId/turnOn', wrapAsync(async (req: Request, res: Response)=> {
   const plugId = Number(req.params.plugId);
 
   const plugTurnOnResponse = await PlugService.togglePlug(plugId, true);
@@ -48,7 +48,7 @@ router.put('/:plugId/turnOn', wrapAsync(async (req: Request, res: Response)=> {
   }
 }));
 
-router.put('/:plugId/turnOff', wrapAsync(async (req: Request, res: Response)=> {
+router.patch('/:plugId/turnOff', wrapAsync(async (req: Request, res: Response)=> {
   const plugId = Number(req.params.plugId);
 
   const plugTurnOffResponse = await PlugService.togglePlug(plugId, false);

@@ -17,7 +17,7 @@ router.post('/', wrapAsync(async (req: Request, res: Response) => {
   }
 }));
 
-router.get('/info', wrapAsync(async (req: Request, res: Response) => {
+router.get('/', wrapAsync(async (req: Request, res: Response) => {
   const userId = Number(req.params.userId);
 
   const cafeListResponse = await CafeService.getCafeList(userId);

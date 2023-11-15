@@ -40,7 +40,11 @@ class PlugService {
 
     const plugInfo = {
       'plugId': plugId,
+      'topic': plug.topic,
       'plugName': plug.plugName,
+      'userId': plug.userId,
+      'cafeId': plug.cafeId,
+      'subGroup': plug.subGroup,
       'onOff': 'dummy',
       'runningTime': 'dummy',
       'usedPower': 'dummy',

@@ -13,7 +13,7 @@ const BaseResponseStatus: any = {
   JWT_FORBIDDEN: { success: false, message: "토큰이 유효하지 않습니다." },
 
   //회원가입
-  SIGNUP_SUCCESS: { success: true, message: '회원가입 성공'},
+  SIGNUP_SUCCESS: { success: true, message: '회원가입 성공' },
   SIGNUP_DUPLICATE: { success: false, message: '이미 존재하는 아이디입니다.' },
 
   //플러그
