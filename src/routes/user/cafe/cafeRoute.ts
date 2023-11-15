@@ -25,4 +25,17 @@ router.get('/', wrapAsync(async (req: Request, res: Response) => {
   return res.status(200).json(cafeListResponse);
 }));
 
+router.get('/:cafeId/plug', wrapAsync(async (req: Request, res: Response) => {
+  const userId = Number(req.params.userId);
+  const cafeId = Number(req.params.cafeId);
+
+  const plugListResponse = await CafeService.getPlugList(userId, cafeId);
+
+  if (plugListResponse.success) {
+    return res.status(200).json(plugListResponse);
+  } else {
+    return res.status(400).json(plugListResponse);
+  }
+}));
+
 export default router;

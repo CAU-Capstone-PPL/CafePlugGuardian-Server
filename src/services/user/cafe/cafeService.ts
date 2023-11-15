@@ -1,4 +1,5 @@
 import Cafes from '../../../models/cafes';
+import Plugs from '../../../models/plugs';
 import response from '../../../helpers/response';
 import BaseResponseStatus from '../../../helpers/baseResponseStatus';
 
@@ -21,6 +22,12 @@ class CafeService {
     const cafeList = await Cafes.find({ userId: userId });
 
     return response(BaseResponseStatus.SUCCESS, cafeList);
+  }
+
+  async getPlugList(userId: number, cafeId: number) {
+    const plugList = await Plugs.find({ userId: userId, cafeId: cafeId });
+
+    return response(BaseResponseStatus.SUCCESS, plugList);
   }
 }
 
