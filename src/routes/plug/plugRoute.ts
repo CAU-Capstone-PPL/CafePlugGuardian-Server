@@ -11,11 +11,11 @@ router.post('/', wrapAsync(async (req: Request, res: Response) => {
   return res.status(200).json(newPlugResponse);
 }));
 
-router.patch('/:plugId', wrapAsync(async (req: Request, res: Response) => {
-  const plugId = Number(req.params.plugId);
+router.patch('/', wrapAsync(async (req: Request, res: Response) => {
+  const plugTopic = req.query.plugTopic as string;
   const { userId, cafeId } = req.body;
 
-  const connectPlugResponse = await PlugService.connectPlug(plugId, userId, cafeId);
+  const connectPlugResponse = await PlugService.connectPlug(plugTopic, userId, cafeId);
 
   if (connectPlugResponse.success) {
     return res.status(200).json(connectPlugResponse);
