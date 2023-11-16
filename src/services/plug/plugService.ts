@@ -17,8 +17,8 @@ class PlugService {
     return response(BaseResponseStatus.SUCCESS, plug);
   }
 
-  async connectPlug(plugTopic: string, userId: number, cafeId: number) {
-    const findPlug = await Plugs.findOne({ topic: plugTopic });
+  async connectPlug(topic: string, userId: number, cafeId: number) {
+    const findPlug = await Plugs.findOne({ topic: topic });
 
     if (findPlug) {
       findPlug.userId = userId;

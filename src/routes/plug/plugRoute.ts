@@ -12,10 +12,10 @@ router.post('/', wrapAsync(async (req: Request, res: Response) => {
 }));
 
 router.patch('/', wrapAsync(async (req: Request, res: Response) => {
-  const plugTopic = req.query.plugTopic as string;
+  const topic = req.query.topic as string;
   const { userId, cafeId } = req.body;
 
-  const connectPlugResponse = await PlugService.connectPlug(plugTopic, userId, cafeId);
+  const connectPlugResponse = await PlugService.connectPlug(topic, userId, cafeId);
 
   if (connectPlugResponse.success) {
     return res.status(200).json(connectPlugResponse);
