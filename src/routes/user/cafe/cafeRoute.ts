@@ -2,7 +2,7 @@ import { Request, Response, Router } from 'express';
 import wrapAsync from '../../../helpers/wrapFunction';
 import CafeService from '../../../services/user/cafe/cafeService';
 
-const router = Router();
+const router = Router({mergeParams: true});
 
 router.post('/', wrapAsync(async (req: Request, res: Response) => {
   const userId = Number(req.params.userId);
