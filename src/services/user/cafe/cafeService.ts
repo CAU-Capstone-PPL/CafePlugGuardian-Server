@@ -26,8 +26,21 @@ class CafeService {
 
   async getPlugList(userId: number, cafeId: number) {
     const plugList = await Plugs.find({ userId: userId, cafeId: cafeId });
+    const result = [];
 
-    return response(BaseResponseStatus.SUCCESS, plugList);
+    for (let i = 0; i < plugList.length; i++) {
+      const plug = {
+        'plugId': plugList[i].plugId,
+        'plugName': plugList[i].plugName,
+        'onOff': 'On',
+        'runningTime': 'dummy',
+        'usedPower': 0,
+        'assignPower': 0
+      };
+      result.push(plug);
+    }
+
+    return response(BaseResponseStatus.SUCCESS, result);
   }
 }
 
