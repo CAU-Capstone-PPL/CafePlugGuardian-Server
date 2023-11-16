@@ -1,4 +1,6 @@
-import { connect } from 'mqtt';
+import {connect, MqttClient} from 'mqtt';
+
+let mqttClient: MqttClient;
 
 function connectMQTTBroker() {
   const mqttBrokerUrl: string | undefined = process.env.MQTT_URL;
@@ -7,7 +9,7 @@ function connectMQTTBroker() {
     console.error('MQTT_URL not defined in .env file');
     process.exit(1);
   }
-  const mqttClient = connect(mqttBrokerUrl);
+  mqttClient = connect(mqttBrokerUrl);
 
   mqttClient.on('connect', () => {
     console.log('MQTT Broker에 연결되었습니다.');
@@ -19,4 +21,4 @@ function connectMQTTBroker() {
   });
 }
 
-export default connectMQTTBroker;
+export { mqttClient, connectMQTTBroker };
