@@ -1,14 +1,14 @@
 import { Document, Schema, model } from 'mongoose';
 
 interface ICafe extends Document {
-  userId: number;
   cafeId: number;
+  userId: number;
   cafeName: string;
 }
 
 const cafeScheme: Schema = new Schema<ICafe>({
+  cafeId: { type: Number, required: true, unique: true },
   userId: { type: Number, required: true },
-  cafeId: { type: Number, required: true },
   cafeName: { type: String, required: true }
 });
 
