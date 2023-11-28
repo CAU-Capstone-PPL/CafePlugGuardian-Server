@@ -1,6 +1,7 @@
 import { Document, Schema, model } from 'mongoose';
 
 interface IPlugLog extends Document {
+  plugUseId: number;
   plugId: number;
   cafeId: number;
   userId: number;
@@ -12,6 +13,7 @@ interface IPlugLog extends Document {
 }
 
 const plugLogScheme: Schema = new Schema<IPlugLog>({
+  plugUseId: { type: Number, required: true, unique: true },
   plugId: { type: Number, required: true },
   cafeId: { type: Number, required: true },
   userId: { type: Number },
