@@ -1,12 +1,14 @@
 import { Request, Response, Router } from 'express';
-import CafeRoute from './cafe/cafeRoute';
 import wrapAsync from '../../helpers/wrapFunction';
 import UserService from '../../services/user/userService';
 
 const router = Router();
 
-router.use('/:userId/cafe', CafeRoute);
-
+/**
+ * 로그인 API
+ * post: /api/user/login
+ * body: userAccount(아이디), userPw(비밀번호)
+ */
 router.post('/login', wrapAsync(async (req: Request, res: Response) => {
   const { userAccount, userPw } = req.body;
 
@@ -19,6 +21,11 @@ router.post('/login', wrapAsync(async (req: Request, res: Response) => {
   }
 }));
 
+/**
+ * 회원가입 API
+ * post: /api/user/signUp
+ * body: userAccount(아이디), userPw(비밀번호), userName(닉네임)
+ */
 router.post('/signUp',wrapAsync(async (req: Request, res: Response) => {
   const { userAccount, userPw, userName } = req.body;
 

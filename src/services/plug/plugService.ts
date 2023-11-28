@@ -17,11 +17,10 @@ class PlugService {
     return response(BaseResponseStatus.SUCCESS, plug);
   }
 
-  async connectPlug(topic: string, userId: number, cafeId: number) {
+  async connectPlug(topic: string, cafeId: number) {
     const findPlug = await Plugs.findOne({ topic: topic });
 
     if (findPlug) {
-      findPlug.userId = userId;
       findPlug.cafeId = cafeId;
       await findPlug.save();
 
@@ -42,7 +41,6 @@ class PlugService {
       'plugId': plugId,
       'topic': plug.topic,
       'plugName': plug.plugName,
-      'userId': plug.userId,
       'cafeId': plug.cafeId,
       'subGroup': plug.subGroup,
       'onOff': 'dummy',

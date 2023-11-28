@@ -1,9 +1,15 @@
 import { Request, Response, Router } from 'express';
-import wrapAsync from '../../../helpers/wrapFunction';
-import CafeService from '../../../services/user/cafe/cafeService';
+import wrapAsync from '../../helpers/wrapFunction';
+import CafeService from '../../services/cafe/cafeService';
 
-const router = Router({mergeParams: true});
+const router = Router();
 
+/**
+ * 카페 추가 API
+ * post: /api/cafe
+ * params: userId (카페 사장 userId)
+ * body: cafeName (카페 이름)
+ */
 router.post('/', wrapAsync(async (req: Request, res: Response) => {
   const userId = Number(req.params.userId);
   const cafeName = req.body.cafeName;
@@ -17,6 +23,11 @@ router.post('/', wrapAsync(async (req: Request, res: Response) => {
   }
 }));
 
+/**
+ * 카페 리스트 API
+ * get: /api/cafe
+ * params: userId (카페 주인 userId)
+ */
 router.get('/', wrapAsync(async (req: Request, res: Response) => {
   const userId = Number(req.params.userId);
 
@@ -25,11 +36,15 @@ router.get('/', wrapAsync(async (req: Request, res: Response) => {
   return res.status(200).json(cafeListResponse);
 }));
 
+/**
+ * 카페 플러그 목록 API
+ * get /api/cafe/:cafeId/plug
+ * params: cafeId (카페 식별 번호)
+ */
 router.get('/:cafeId/plug', wrapAsync(async (req: Request, res: Response) => {
-  const userId = Number(req.params.userId);
   const cafeId = Number(req.params.cafeId);
 
-  const plugListResponse = await CafeService.getPlugList(userId, cafeId);
+  const plugListResponse = await CafeService.getPlugList(cafeId);
 
   if (plugListResponse.success) {
     return res.status(200).json(plugListResponse);
