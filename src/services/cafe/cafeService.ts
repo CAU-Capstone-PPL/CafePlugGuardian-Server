@@ -2,6 +2,8 @@ import Cafes from '../../models/cafes';
 import Plugs from '../../models/plugs';
 import response from '../../helpers/response';
 import BaseResponseStatus from '../../helpers/baseResponseStatus';
+import Pins from '../../models/pins';
+import pinNumbers from '../../models/pins';
 
 class CafeService {
   async addCafe(userId: number, cafeName: string) {
@@ -43,8 +45,29 @@ class CafeService {
     return response(BaseResponseStatus.SUCCESS, result);
   }
 
+  generateRandomPinNumber() {
+    return Math.floor(1000 + Math.random() * 9000);
+  }
+
   async getPinNumber(cafeId: number) {
-    
+    let pinNumber: number;
+    while (true) {
+      pinNumber = this.generateRandomPinNumber();
+      if (!(await Pins.findOne({ pinNumber: pinNumber, cafeId: cafeId, validStatus: true }))) {
+        break;
+      }
+    }
+
+    const nowDate = new Date();
+    const pin = new Pins({
+      pinNumber: pinNumber,
+      cafeId: cafeId,
+      issueTime: nowDate,
+      validStatus: true
+    });
+    await pin.save();
+
+    return response(BaseResponseStatus.SUCCESS, pin);
   }
 }
 

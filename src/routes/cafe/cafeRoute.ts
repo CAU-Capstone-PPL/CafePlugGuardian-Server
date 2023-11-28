@@ -61,7 +61,13 @@ router.get('/:cafeId/plug', wrapAsync(async (req: Request, res: Response) => {
 router.post('/:cafeId/pin', wrapAsync(async (req: Request, res: Response)=> {
   const cafeId = Number(req.params.cafeId);
 
+  const getPinNumberResponse = await CafeService.getPinNumber(cafeId);
 
+  if (getPinNumberResponse.success) {
+    return res.status(200).json(getPinNumberResponse);
+  } else {
+    return res.status(400).json(getPinNumberResponse);
+  }
 }));
 
 export default router;
