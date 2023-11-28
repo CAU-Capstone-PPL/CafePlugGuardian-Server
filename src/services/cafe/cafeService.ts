@@ -3,7 +3,6 @@ import Plugs from '../../models/plugs';
 import response from '../../helpers/response';
 import BaseResponseStatus from '../../helpers/baseResponseStatus';
 import Pins from '../../models/pins';
-import pinNumbers from '../../models/pins';
 
 class CafeService {
   async addCafe(userId: number, cafeName: string) {

@@ -6,8 +6,9 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production pm2 start ts-node src/app.ts",
     "dev": "cross-env NODE_ENV=development nodemon --watch src --exec ts-node src/app.ts",
-    "test": "cross-env NODE_ENV=test nodemon --watch src --exec ts-node src/app.ts",
-    "generate-secret": "ts-node test/jwtGenerator.ts"
+    "testDev": "cross-env NODE_ENV=test nodemon --watch src --exec ts-node src/app.ts",
+    "generate-secret": "ts-node test/jwtGenerator.ts",
+    "test": "ts-node test/test.ts"
   },
   "author": "keylime7",
   "license": "MIT",
