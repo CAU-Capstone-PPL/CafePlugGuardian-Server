@@ -11,7 +11,7 @@ const router = Router();
  * body: cafeName (카페 이름)
  */
 router.post('/', wrapAsync(async (req: Request, res: Response) => {
-  const userId = Number(req.params.userId);
+  const userId = Number(req.body.userId);
   const cafeName = req.body.cafeName;
 
   const addCafeResponse = await CafeService.addCafe(userId, cafeName);
@@ -24,7 +24,7 @@ router.post('/', wrapAsync(async (req: Request, res: Response) => {
 }));
 
 /**
- * 카페 리스트 API
+ * 카페 목록 API
  * get: /api/cafe
  * params: userId (카페 주인 userId)
  */
