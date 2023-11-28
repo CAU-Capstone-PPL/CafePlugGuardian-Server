@@ -50,7 +50,7 @@ class CafeService {
 
   async getPinNumber(cafeId: number) {
     const nowDate = new Date();
-    const oneHourAgo = nowDate;
+    const oneHourAgo = new Date();
     oneHourAgo.setHours(oneHourAgo.getHours() - 1);
 
     await Pins.updateMany(
@@ -74,7 +74,22 @@ class CafeService {
     });
     await pin.save();
 
-    return response(BaseResponseStatus.SUCCESS, pin);
+    const result = {
+      'pinNumber': pinNumber,
+      'issueTime': {
+        'date': {
+          'year': nowDate.getFullYear(),
+          'month': nowDate.getMonth() + 1,
+          'day': nowDate.getDate()
+        },
+        'time': {
+          'hours': nowDate.getHours(),
+          'minutes': nowDate.getMinutes()
+        }
+      }
+    };
+
+    return response(BaseResponseStatus.SUCCESS, result);
   }
 }
 
