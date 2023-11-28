@@ -53,4 +53,15 @@ router.get('/:cafeId/plug', wrapAsync(async (req: Request, res: Response) => {
   }
 }));
 
+/**
+ * 핀 번호 발급 API
+ * get /api/cafe/:cafeId/pin
+ * params: cafeId (카페 식별 번호)
+ */
+router.post('/:cafeId/pin', wrapAsync(async (req: Request, res: Response)=> {
+  const cafeId = Number(req.params.cafeId);
+
+
+}));
+
 export default router;

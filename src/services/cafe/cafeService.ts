@@ -42,6 +42,10 @@ class CafeService {
 
     return response(BaseResponseStatus.SUCCESS, result);
   }
+
+  async getPinNumber(cafeId: number) {
+    
+  }
 }
 
 export default new CafeService();
