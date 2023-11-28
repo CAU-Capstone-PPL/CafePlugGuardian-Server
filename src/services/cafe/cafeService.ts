@@ -50,6 +50,15 @@ class CafeService {
   }
 
   async getPinNumber(cafeId: number) {
+    const nowDate = new Date();
+    const oneHourAgo = nowDate;
+    oneHourAgo.setHours(oneHourAgo.getHours() - 1);
+
+    await Pins.updateMany(
+      { issueTime: { $lt: oneHourAgo }, validStatus: true },
+      { $set: { validStatus: false } }
+    );
+
     let pinNumber: number;
     while (true) {
       pinNumber = this.generateRandomPinNumber();
@@ -58,7 +67,6 @@ class CafeService {
       }
     }
 
-    const nowDate = new Date();
     const pin = new Pins({
       pinNumber: pinNumber,
       cafeId: cafeId,
