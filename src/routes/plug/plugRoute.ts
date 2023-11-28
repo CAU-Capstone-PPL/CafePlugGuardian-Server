@@ -86,4 +86,22 @@ router.patch('/:plugId/turnOff', wrapAsync(async (req: Request, res: Response)=>
   }
 }));
 
+/**
+ * 플러그 고객 사용 API
+ * post: /api/plug/:plugId/use
+ * body: pinNumber
+ */
+router.post('/:plugId/use', wrapAsync(async (req: Request, res: Response) => {
+  const plugId = Number(req.params.plugId);
+  const pinNumber = req.body.pinNumber;
+
+  const usePlugResponse = await PlugService.usePlug(plugId, pinNumber);
+
+  if (usePlugResponse.success) {
+    return res.status(200).json(usePlugResponse);
+  } else {
+    return res.status(400).json(usePlugResponse);
+  }
+}));
+
 export default router;
