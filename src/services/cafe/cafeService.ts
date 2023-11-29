@@ -1,6 +1,7 @@
 import Cafes from '../../models/cafes';
 import Plugs from '../../models/plugs';
 import Pins from '../../models/pins';
+import plugService from '../plug/plugService';
 
 class CafeService {
   async addCafe(userId: number, cafeName: string) {
@@ -28,15 +29,8 @@ class CafeService {
     const result = [];
 
     for (let i = 0; i < plugList.length; i++) {
-      const plug = {
-        'plugId': plugList[i].plugId,
-        'plugName': plugList[i].plugName,
-        'onOff': 'On',
-        'runningTime': 'dummy',
-        'usedPower': 0,
-        'assignPower': 0
-      };
-      result.push(plug);
+      const plugInfo = await plugService.getPlugInfo(plugList[i].plugId);
+      result.push(plugInfo);
     }
 
     return result;
