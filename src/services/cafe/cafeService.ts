@@ -1,7 +1,5 @@
 import Cafes from '../../models/cafes';
 import Plugs from '../../models/plugs';
-import response from '../../helpers/response';
-import { BaseResponseStatus } from '../../helpers/baseResponseStatus';
 import Pins from '../../models/pins';
 
 class CafeService {
@@ -16,13 +14,13 @@ class CafeService {
     });
     await cafe.save();
 
-    return response(BaseResponseStatus.SUCCESS);
+    return;
   }
 
   async getCafeList(userId: number) {
     const cafeList = await Cafes.find({ userId: userId });
 
-    return response(BaseResponseStatus.SUCCESS, cafeList);
+    return cafeList;
   }
 
   async getPlugList(cafeId: number) {
@@ -41,7 +39,7 @@ class CafeService {
       result.push(plug);
     }
 
-    return response(BaseResponseStatus.SUCCESS, result);
+    return result;
   }
 
   generateRandomPinNumber() {
@@ -89,7 +87,7 @@ class CafeService {
       }
     };
 
-    return response(BaseResponseStatus.SUCCESS, result);
+    return result;
   }
 }
 

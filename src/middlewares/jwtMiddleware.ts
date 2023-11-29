@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import response from '../helpers/response';
-import BaseResponseStatus from '../helpers/baseResponseStatus';
+import {BaseResponseStatus} from '../helpers/baseResponseStatus';
 import jwt from 'jsonwebtoken';
 
 declare global {

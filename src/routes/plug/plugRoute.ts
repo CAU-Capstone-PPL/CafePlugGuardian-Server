@@ -1,6 +1,8 @@
 import { Request, Response, Router } from 'express';
 import wrapAsync from '../../helpers/wrapFunction';
 import PlugService from '../../services/plug/plugService';
+import {BaseResponseStatus} from '../../helpers/baseResponseStatus';
+import response from '../../helpers/response';
 
 const router = Router();
 
@@ -11,10 +13,10 @@ const router = Router();
  */
 router.post('/', wrapAsync(async (req: Request, res: Response) => {
   const newPlugResponse = await PlugService.newPlug();
+  const responseStatus = BaseResponseStatus.SUCCESS;
 
-  return res.status(200).json(newPlugResponse);
+  return res.status(responseStatus.status).json(response(responseStatus, newPlugResponse));
 }));
-
 
 /**
  * 플러그 연결 API
@@ -27,12 +29,9 @@ router.patch('/', wrapAsync(async (req: Request, res: Response) => {
   const cafeId = req.body.cafeId;
 
   const connectPlugResponse = await PlugService.connectPlug(topic, cafeId);
+  const responseStatus = BaseResponseStatus.SUCCESS;
 
-  if (connectPlugResponse.success) {
-    return res.status(200).json(connectPlugResponse);
-  } else {
-    return res.status(400).json(connectPlugResponse);
-  }
+  return res.status(responseStatus.status).json(response(responseStatus, connectPlugResponse));
 }));
 
 /**
@@ -44,12 +43,9 @@ router.get('/:plugId/info', wrapAsync(async (req: Request, res: Response) => {
   const plugId = Number(req.params.plugId);
 
   const plugInfoResponse = await PlugService.getPlugInfo(plugId);
+  const responseStatus = BaseResponseStatus.SUCCESS;
 
-  if (plugInfoResponse.success) {
-    return res.status(200).json(plugInfoResponse);
-  } else {
-    return res.status(400).json(plugInfoResponse);
-  }
+  return res.status(responseStatus.status).json(response(responseStatus, plugInfoResponse));
 }));
 
 /**
@@ -61,12 +57,9 @@ router.patch('/:plugId/turnOn', wrapAsync(async (req: Request, res: Response)=> 
   const plugId = Number(req.params.plugId);
 
   const plugTurnOnResponse = await PlugService.togglePlug(plugId, true);
+  const responseStatus = BaseResponseStatus.SUCCESS;
 
-  if (plugTurnOnResponse.success) {
-    return res.status(200).json(plugTurnOnResponse);
-  } else {
-    return res.status(400).json(plugTurnOnResponse);
-  }
+  return res.status(responseStatus.status).json(response(responseStatus, plugTurnOnResponse));
 }));
 
 /**
@@ -78,12 +71,9 @@ router.patch('/:plugId/turnOff', wrapAsync(async (req: Request, res: Response)=>
   const plugId = Number(req.params.plugId);
 
   const plugTurnOffResponse = await PlugService.togglePlug(plugId, false);
+  const responseStatus = BaseResponseStatus.SUCCESS;
 
-  if (plugTurnOffResponse.success) {
-    return res.status(200).json(plugTurnOffResponse);
-  } else {
-    return res.status(400).json(plugTurnOffResponse);
-  }
+  return res.status(responseStatus.status).json(response(responseStatus, plugTurnOffResponse));
 }));
 
 /**
@@ -96,12 +86,9 @@ router.post('/:plugId/use', wrapAsync(async (req: Request, res: Response) => {
   const pinNumber = req.body.pinNumber;
 
   const usePlugResponse = await PlugService.usePlug(plugId, pinNumber);
+  const responseStatus = BaseResponseStatus.SUCCESS;
 
-  if (usePlugResponse.success) {
-    return res.status(200).json(usePlugResponse);
-  } else {
-    return res.status(400).json(usePlugResponse);
-  }
+  return res.status(responseStatus.status).json(response(responseStatus, usePlugResponse));
 }));
 
 export default router;

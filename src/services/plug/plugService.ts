@@ -1,8 +1,7 @@
 import Plugs from '../../models/plugs';
-import response from '../../helpers/response';
-import { BaseResponseStatus } from '../../helpers/baseResponseStatus';
 import Pins from '../../models/pins';
 import PlugLogs from '../../models/plugLogs';
+import { BaseResponseStatus } from '../../helpers/baseResponseStatus';
 import HttpError from '../../helpers/httpError';
 
 class PlugService {
@@ -17,20 +16,20 @@ class PlugService {
     });
     await plug.save();
 
-    return response(BaseResponseStatus.SUCCESS, plug);
+    return plug;
   }
 
   async connectPlug(topic: string, cafeId: number) {
     const findPlug = await Plugs.findOne({ topic: topic });
 
-    if (findPlug) {
-      findPlug.cafeId = cafeId;
-      await findPlug.save();
-
-      return response(BaseResponseStatus.SUCCESS, findPlug);
-    } else {
+    if (!findPlug) {
       throw new HttpError(BaseResponseStatus.UNKNOWN_PLUG);
     }
+
+    findPlug.cafeId = cafeId;
+    await findPlug.save();
+
+    return findPlug;
   }
 
   async getPlugInfo(plugId: number) {
@@ -51,7 +50,8 @@ class PlugService {
       'usedPower': 'dummy',
       'assignPower': 'dummy'
     };
-    return response(BaseResponseStatus.SUCCESS, plugInfo);
+
+    return plugInfo;
   }
 
   async togglePlug(plugId: number, toggle: boolean) {
@@ -61,7 +61,7 @@ class PlugService {
     } else {
       //mqtt로 toggle off 하는 코드
     }
-    return response(BaseResponseStatus.SUCCESS);
+    return;
   }
 
   async usePlug(plugId: number, pinNumber: number) {
@@ -95,7 +95,7 @@ class PlugService {
     });
     await plugLog.save();
 
-    return response(BaseResponseStatus.SUCCESS, plugLog);
+    return plugLog;
   }
 }
 

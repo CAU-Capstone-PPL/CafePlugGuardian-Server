@@ -1,6 +1,8 @@
 import { Request, Response, Router } from 'express';
 import wrapAsync from '../../helpers/wrapFunction';
 import CafeService from '../../services/cafe/cafeService';
+import {BaseResponseStatus} from '../../helpers/baseResponseStatus';
+import response from '../../helpers/response';
 
 const router = Router();
 
@@ -15,12 +17,9 @@ router.post('/', wrapAsync(async (req: Request, res: Response) => {
   const cafeName = req.body.cafeName;
 
   const addCafeResponse = await CafeService.addCafe(userId, cafeName);
+  const responseStatus = BaseResponseStatus.SUCCESS;
 
-  if (addCafeResponse.success) {
-    return res.status(200).json(addCafeResponse);
-  } else {
-    return res.status(400).json(addCafeResponse);
-  }
+  return res.status(responseStatus.status).json(response(responseStatus, addCafeResponse));
 }));
 
 /**
@@ -32,8 +31,9 @@ router.get('/', wrapAsync(async (req: Request, res: Response) => {
   const userId = Number(req.params.userId);
 
   const cafeListResponse = await CafeService.getCafeList(userId);
+  const responseStatus = BaseResponseStatus.SUCCESS;
 
-  return res.status(200).json(cafeListResponse);
+  return res.status(responseStatus.status).json(response(responseStatus, cafeListResponse));
 }));
 
 /**
@@ -45,12 +45,9 @@ router.get('/:cafeId/plug', wrapAsync(async (req: Request, res: Response) => {
   const cafeId = Number(req.params.cafeId);
 
   const plugListResponse = await CafeService.getPlugList(cafeId);
+  const responseStatus = BaseResponseStatus.SUCCESS;
 
-  if (plugListResponse.success) {
-    return res.status(200).json(plugListResponse);
-  } else {
-    return res.status(400).json(plugListResponse);
-  }
+  return res.status(responseStatus.status).json(response(responseStatus, plugListResponse));
 }));
 
 /**
@@ -62,12 +59,9 @@ router.post('/:cafeId/pin', wrapAsync(async (req: Request, res: Response)=> {
   const cafeId = Number(req.params.cafeId);
 
   const getPinNumberResponse = await CafeService.getPinNumber(cafeId);
+  const responseStatus = BaseResponseStatus.SUCCESS;
 
-  if (getPinNumberResponse.success) {
-    return res.status(200).json(getPinNumberResponse);
-  } else {
-    return res.status(400).json(getPinNumberResponse);
-  }
+  return res.status(responseStatus.status).json(response(responseStatus, getPinNumberResponse));
 }));
 
 export default router;

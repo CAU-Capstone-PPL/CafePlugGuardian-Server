@@ -1,6 +1,5 @@
 import configureEnvironment from './config/environment';
 import connectDatabase from './config/database';
-import configureHTTPS from './config/https';
 import { connectMQTTBroker } from './config/mqtt';
 import configureExpressApp from './config/expressApp';
 
