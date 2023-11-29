@@ -1,8 +1,9 @@
 import Plugs from '../../models/plugs';
 import response from '../../helpers/response';
-import BaseResponseStatus from '../../helpers/baseResponseStatus';
+import { BaseResponseStatus } from '../../helpers/baseResponseStatus';
 import Pins from '../../models/pins';
 import PlugLogs from '../../models/plugLogs';
+import HttpError from '../../helpers/httpError';
 
 class PlugService {
   async newPlug() {
@@ -28,7 +29,7 @@ class PlugService {
 
       return response(BaseResponseStatus.SUCCESS, findPlug);
     } else {
-      return response(BaseResponseStatus.UNKNOWN_PLUG);
+      throw new HttpError(BaseResponseStatus.UNKNOWN_PLUG);
     }
   }
 
@@ -36,7 +37,7 @@ class PlugService {
     const plug = await Plugs.findOne({ plugId: plugId });
 
     if (!plug) {
-      return response(BaseResponseStatus.ERROR);
+      throw new HttpError(BaseResponseStatus.ERROR);
     }
 
     const plugInfo = {
@@ -66,12 +67,12 @@ class PlugService {
   async usePlug(plugId: number, pinNumber: number) {
     const plug = await Plugs.findOne({ plugId: plugId });
     if (!plug) {
-      return response(BaseResponseStatus.ERROR);
+      throw new HttpError(BaseResponseStatus.ERROR);
     }
 
     const pin = await Pins.findOne({ pinNumber: pinNumber, cafeId: plug.cafeId, validStatus: true });
     if(!pin) {
-      return response(BaseResponseStatus.ERROR);
+      throw new HttpError(BaseResponseStatus.ERROR);
     }
     pin.validStatus = false;
     await pin.save();
@@ -80,7 +81,7 @@ class PlugService {
     const oneHourAgo = new Date();
     oneHourAgo.setHours(oneHourAgo.getHours() - 1);
     if (pin.issueTime.getTime() < oneHourAgo.getTime()) {
-      return response(BaseResponseStatus.ERROR);
+      throw new HttpError(BaseResponseStatus.ERROR);
     }
 
     const plugLog = new PlugLogs({

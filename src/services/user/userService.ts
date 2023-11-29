@@ -1,7 +1,8 @@
 import Users from '../../models/users';
 import response from '../../helpers/response';
-import BaseResponseStatus from '../../helpers/baseResponseStatus';
+import { BaseResponseStatus } from '../../helpers/baseResponseStatus';
 import jwt from 'jsonwebtoken';
+import HttpError from '../../helpers/httpError';
 
 class UserService {
   async verifyLogin(userAccount: string, userPw: string) {
@@ -10,7 +11,7 @@ class UserService {
     if (user && user.userPw === userPw) {
       const secretKey: string | undefined = process.env.SECRET_KEY;
       if (secretKey == undefined) {
-        return response(BaseResponseStatus.SECRET_KEY_UNDEFINED);
+        throw new HttpError(BaseResponseStatus.SECRET_KEY_UNDEFINED);
       }
 
       const token = jwt.sign(
@@ -32,14 +33,14 @@ class UserService {
         }
       );
     } else {
-      return response(BaseResponseStatus.LOGIN_FAIL);
+      throw new HttpError(BaseResponseStatus.LOGIN_FAIL);
     }
   }
 
   async signUp(userAccount: string, userPw: string, userName: string) {
     const existingUser = await Users.findOne({ userAccount: userAccount });
     if(existingUser) {
-      return response(BaseResponseStatus.SIGNUP_DUPLICATE);
+      throw new HttpError(BaseResponseStatus.SIGNUP_DUPLICATE);
     }
 
     const lastUser = await Users.findOne().sort({ userId: -1 });

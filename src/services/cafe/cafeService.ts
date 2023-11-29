@@ -1,7 +1,7 @@
 import Cafes from '../../models/cafes';
 import Plugs from '../../models/plugs';
 import response from '../../helpers/response';
-import BaseResponseStatus from '../../helpers/baseResponseStatus';
+import { BaseResponseStatus } from '../../helpers/baseResponseStatus';
 import Pins from '../../models/pins';
 
 class CafeService {
