@@ -29,7 +29,8 @@ const BaseResponseStatus: any = {
   SIGNUP_DUPLICATE: { status: 400, success: false, message: '이미 존재하는 아이디입니다.' },
 
   //플러그
-  UNKNOWN_PLUG: { status: 400, success: false, message: '존재하지 않은 플러그입니다.' }
+  UNKNOWN_PLUG: { status: 400, success: false, message: '존재하지 않은 플러그입니다.' },
+  NOT_CONNECTED_PLUG: { status: 400, success: false, message: '연결되지 않은 플러그입니다.' },
 };
 
 export { IBaseResponseStatus, BaseResponseStatus };

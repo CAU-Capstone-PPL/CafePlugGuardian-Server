@@ -1,7 +1,7 @@
 import Plugs from '../../models/plugs';
 import Pins from '../../models/pins';
 import PlugLogs from '../../models/plugLogs';
-import { BaseResponseStatus } from '../../helpers/baseResponseStatus';
+import {BaseResponseStatus} from '../../helpers/baseResponseStatus';
 import HttpError from '../../helpers/httpError';
 
 class PlugService {
@@ -12,7 +12,9 @@ class PlugService {
     const plug = new Plugs({
       plugId: plugId,
       topic: `plug_${plugId}`,
-      plugName: `plug_${plugId}`
+      isConnected: false,
+      plugName: `plug_${plugId}`,
+      useStatus: false
     });
     await plug.save();
 
@@ -26,6 +28,7 @@ class PlugService {
       throw new HttpError(BaseResponseStatus.UNKNOWN_PLUG);
     }
 
+    findPlug.isConnected = true;
     findPlug.cafeId = cafeId;
     await findPlug.save();
 
@@ -36,22 +39,62 @@ class PlugService {
     const plug = await Plugs.findOne({ plugId: plugId });
 
     if (!plug) {
-      throw new HttpError(BaseResponseStatus.ERROR);
+      throw new HttpError(BaseResponseStatus.UNKNOWN_PLUG);
+    }
+    if (!plug.isConnected) {
+      throw new HttpError(BaseResponseStatus.NOT_CONNECTED_PLUG);
     }
 
-    const plugInfo = {
-      'plugId': plugId,
+    const usePlugLog = await PlugLogs.findOne({ plugId: plug.plugId, useStatus: true });
+
+    let startHours = 0;
+    let startMinutes = 0;
+    let runningHours = 0;
+    let runningMinutes = 0;
+
+    let assignPower = 0.0;
+    let usedPower = 0.0;
+    let realTimePower = 0.0;
+
+    let toggle = false;
+
+    if (usePlugLog) {
+      startHours = usePlugLog.startTime.getHours();
+      startMinutes = usePlugLog.startTime.getMinutes();
+
+      const nowDate = new Date();
+      const timeDiff = nowDate.getTime() - usePlugLog.startTime.getTime();
+      runningHours = timeDiff / (1000 * 60 * 60);
+      runningMinutes = timeDiff / (1000 * 60);
+
+      assignPower = 5.0;
+      usedPower = 3.0;
+      realTimePower = 1.0;
+
+      //mqtt 연결해서 toggle 얻기
+    }
+
+    return {
+      'plugId': plug.plugId,
       'topic': plug.topic,
-      'plugName': plug.plugName,
       'cafeId': plug.cafeId,
       'subGroup': plug.subGroup,
-      'onOff': 'dummy',
-      'runningTime': 'dummy',
-      'usedPower': 'dummy',
-      'assignPower': 'dummy'
+      'plugName': plug.plugName,
+      'plugDescription': plug.plugDescription,
+      'useStatus': plug.useStatus,
+      'startTime': {
+        'hours': startHours,
+        'minutes': startMinutes
+      },
+      "runningTime": {
+        'hours': runningHours,
+        'minutes': runningMinutes
+      },
+      'assignPower': assignPower,
+      'usedPower': usedPower,
+      'realTimePower': realTimePower,
+      'toggle': toggle
     };
-
-    return plugInfo;
   }
 
   async togglePlug(plugId: number, toggle: boolean) {
