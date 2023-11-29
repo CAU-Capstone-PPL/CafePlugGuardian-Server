@@ -8,6 +8,8 @@ const BaseResponseStatus: any = {
   //디폴트
   SUCCESS: { status: 200, success: true, message: '성공' },
   ERROR: { status: 400, success: false, message: '실패' },
+  NOT_FOUND: { status: 404, success: false, message: '404 Not Found' },
+  SERVER_ERROR: { status: 500, success: false, message: 'Internal Server Error' },
 
   //TODO status
   TODO_SUCCESS: { status: 200, success: true, message: '성공, response 미구현' },
