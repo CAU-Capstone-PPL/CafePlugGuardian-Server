@@ -110,12 +110,12 @@ class PlugService {
   async usePlug(plugId: number, pinNumber: number) {
     const plug = await Plugs.findOne({ plugId: plugId });
     if (!plug) {
-      throw new HttpError(BaseResponseStatus.ERROR);
+      throw new HttpError(BaseResponseStatus.UNKNOWN_PLUG);
     }
 
     const pin = await Pins.findOne({ pinNumber: pinNumber, cafeId: plug.cafeId, validStatus: true });
     if(!pin) {
-      throw new HttpError(BaseResponseStatus.ERROR);
+      throw new HttpError(BaseResponseStatus.UNKNOWN_PIN);
     }
     pin.validStatus = false;
     await pin.save();
@@ -124,7 +124,7 @@ class PlugService {
     const oneHourAgo = new Date();
     oneHourAgo.setHours(oneHourAgo.getHours() - 1);
     if (pin.issueTime.getTime() < oneHourAgo.getTime()) {
-      throw new HttpError(BaseResponseStatus.ERROR);
+      throw new HttpError(BaseResponseStatus.UNKNOWN_PIN);
     }
 
     const plugLog = new PlugLogs({
