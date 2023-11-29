@@ -7,7 +7,10 @@ class UserService {
   async verifyLogin(userAccount: string, userPw: string) {
     const user = await Users.findOne({ userAccount: userAccount });
 
-    if (!user || user.userPw !== userPw) {
+    if(!user) {
+      throw new HttpError(BaseResponseStatus.LOGIN_ACCOUNT_NOT_FOUNT);
+    }
+    if (user.userPw !== userPw) {
       throw new HttpError(BaseResponseStatus.LOGIN_FAIL);
     }
 
