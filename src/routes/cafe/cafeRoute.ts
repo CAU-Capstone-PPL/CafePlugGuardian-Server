@@ -9,11 +9,10 @@ const router = Router();
 /**
  * 카페 추가 API
  * post: /api/cafe
- * params: userId (카페 사장 userId)
- * body: cafeName (카페 이름)
+ * body: userId (카페 사장 userId), cafeName (카페 이름)
  */
 router.post('/', wrapAsync(async (req: Request, res: Response) => {
-  const userId = Number(req.body.userId);
+  const userId = req.body.userId;
   const cafeName = req.body.cafeName;
 
   const addCafeResponse = await CafeService.addCafe(userId, cafeName);

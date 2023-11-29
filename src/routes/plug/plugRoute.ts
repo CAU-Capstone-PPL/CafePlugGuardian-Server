@@ -97,7 +97,7 @@ router.post('/:plugId/use', wrapAsync(async (req: Request, res: Response) => {
  * post: /api/plug/:plugId/stop
  * params: plugId (플러그 식별 번호)
  */
-router.post('/:plugId/use', wrapAsync(async (req: Request, res: Response) => {
+router.post('/:plugId/stop', wrapAsync(async (req: Request, res: Response) => {
   const plugId = Number(req.params.plugId);
 
   const stopPlugResponse = await PlugService.stopPlug(plugId);
