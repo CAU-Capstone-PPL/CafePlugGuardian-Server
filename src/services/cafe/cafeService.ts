@@ -20,8 +20,18 @@ class CafeService {
 
   async getCafeList(userId: number) {
     const cafeList = await Cafes.find({ userId: userId });
+    const result = [];
 
-    return cafeList;
+    for (let i = 0; i < cafeList.length; i++) {
+      const cafe = {
+        cafeIndex: i + 1,
+        cafeId: cafeList[i].cafeId,
+        cafeName: cafeList[i].cafeName
+      }
+      result.push(cafe);
+    }
+
+    return result;
   }
 
   async getPlugList(cafeId: number) {

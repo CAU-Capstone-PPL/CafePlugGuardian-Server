@@ -19,15 +19,22 @@ class UserService {
       throw new HttpError(BaseResponseStatus.SECRET_KEY_UNDEFINED);
     }
 
-    return jwt.sign(
+    const token = jwt.sign(
       {
         userId: user.userId,
         userAccount: user.userAccount,
         userName: user.userName
       },
       secretKey,
-      {expiresIn: '1h'}
+      { expiresIn: '1h' }
     );
+
+    return {
+      'Authorization': token,
+      'userId': user.userId,
+      'userAccount': user.userAccount,
+      'userName': user.userName
+    };
   }
 
   async signUp(userAccount: string, userPw: string, userName: string) {

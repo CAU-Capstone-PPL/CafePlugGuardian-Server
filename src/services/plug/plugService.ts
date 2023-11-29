@@ -18,7 +18,12 @@ class PlugService {
     });
     await plug.save();
 
-    return plug;
+    return {
+      plugId: plug.plugId,
+      topic: plug.topic,
+      isConnected: plug.isConnected,
+      plugName: plug.plugName
+    };
   }
 
   async connectPlug(topic: string, cafeId: number) {
@@ -32,7 +37,7 @@ class PlugService {
     findPlug.cafeId = cafeId;
     await findPlug.save();
 
-    return findPlug;
+    return;
   }
 
   async getPlugInfo(plugId: number) {
@@ -141,7 +146,7 @@ class PlugService {
     });
     await plugLog.save();
 
-    return plugLog;
+    return;
   }
 
   async stopPlug(plugId: number) {
@@ -165,7 +170,7 @@ class PlugService {
     //usedPower 한번 갱신 하면 좋을듯
     await plugLog.save();
 
-    return plugLog;
+    return;
   }
 }
 
