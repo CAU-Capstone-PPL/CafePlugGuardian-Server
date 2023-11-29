@@ -10,6 +10,7 @@ const BaseResponseStatus: any = {
   ERROR: { status: 400, success: false, message: '실패' },
   NOT_FOUND: { status: 404, success: false, message: '404 Not Found' },
   SERVER_ERROR: { status: 500, success: false, message: 'Internal Server Error' },
+  IMPOSSIBLE_ERROR: { status: 500, success: false, message: '오류가 터지면 안되는 상황에 오류가 발생했습니다.' },
 
   //TODO status
   TODO_SUCCESS: { status: 200, success: true, message: '성공, status, response 임시응답' },
@@ -32,6 +33,7 @@ const BaseResponseStatus: any = {
   //플러그
   UNKNOWN_PLUG: { status: 404, success: false, message: '존재하지 않은 플러그입니다.' },
   NOT_CONNECTED_PLUG: { status: 403, success: false, message: '연결되지 않은 플러그입니다.' },
+  NOT_USED_PLUG: { status: 400, success: false, message: '사용 중이지 않은 플러그입니다.' },
 
   //PIN
   UNKNOWN_PIN: { status: 403, success: false, message: 'PIN 번호가 유효하지 않습니다.' }

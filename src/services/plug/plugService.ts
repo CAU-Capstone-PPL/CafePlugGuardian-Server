@@ -127,15 +127,42 @@ class PlugService {
       throw new HttpError(BaseResponseStatus.UNKNOWN_PIN);
     }
 
+    const lastPlugLog = await PlugLogs.findOne().sort({ plugUseId: -1 });
+    const plugUseId = lastPlugLog ? lastPlugLog.plugUseId + 1 : 1;
+
     const plugLog = new PlugLogs({
-      plugUseId: 0,
-      plugId: plugId,
-      cafeId: plug.plugId,
+      plugUseId: plugUseId,
+      plugId: plug.plugId,
+      cafeId: plug.cafeId,
       useStatus: true,
       startTime: nowDate,
       assignPower: 0,
       usedPower: 0
     });
+    await plugLog.save();
+
+    return plugLog;
+  }
+
+  async stopPlug(plugId: number) {
+    const plug = await Plugs.findOne({ plugId: plugId });
+
+    if(!plug) {
+      throw new HttpError(BaseResponseStatus.UNKNOWN_PLUG);
+    } else if(!plug.useStatus) {
+      throw new HttpError(BaseResponseStatus.NOT_USED_PLUG);
+    }
+    plug.useStatus = false;
+    await plug.save();
+
+    const plugLog = await PlugLogs.findOne({ plugId: plugId, useStatus: true });
+    if(!plugLog) {
+      throw new HttpError(BaseResponseStatus.IMPOSSIBLE_ERROR);
+    }
+
+    plugLog.useStatus = false;
+    plugLog.endTime = new Date();
+    //usedPower 한번 갱신 하면 좋을듯
     await plugLog.save();
 
     return plugLog;

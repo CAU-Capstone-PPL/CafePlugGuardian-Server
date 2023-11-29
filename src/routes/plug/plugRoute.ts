@@ -79,6 +79,7 @@ router.patch('/:plugId/turnOff', wrapAsync(async (req: Request, res: Response)=>
 /**
  * 플러그 고객 사용 API
  * post: /api/plug/:plugId/use
+ * params: plugId (플러그 식별 번호)
  * body: pinNumber
  */
 router.post('/:plugId/use', wrapAsync(async (req: Request, res: Response) => {
@@ -89,6 +90,20 @@ router.post('/:plugId/use', wrapAsync(async (req: Request, res: Response) => {
   const responseStatus = BaseResponseStatus.SUCCESS;
 
   return res.status(responseStatus.status).json(response(responseStatus, usePlugResponse));
+}));
+
+/**
+ * 플러그 사용 종료 API
+ * post: /api/plug/:plugId/stop
+ * params: plugId (플러그 식별 번호)
+ */
+router.post('/:plugId/use', wrapAsync(async (req: Request, res: Response) => {
+  const plugId = Number(req.params.plugId);
+
+  const stopPlugResponse = await PlugService.stopPlug(plugId);
+  const responseStatus = BaseResponseStatus.SUCCESS;
+
+  return res.status(responseStatus.status).json(response(responseStatus, stopPlugResponse));
 }));
 
 export default router;
