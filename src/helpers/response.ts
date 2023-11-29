@@ -1,13 +1,15 @@
+import { IBaseResponseStatus } from './baseResponseStatus';
+
 interface ResponseFormat {
   success: boolean;
   message: string;
   result?: any;
 }
 
-const response = ({ success, message }: ResponseFormat, result?: any): ResponseFormat => {
+const response = (responseStatus: IBaseResponseStatus, result?: any): ResponseFormat => {
   return {
-    success: success,
-    message: message,
+    success: responseStatus.success,
+    message: responseStatus.message,
     result: result
   };
 };

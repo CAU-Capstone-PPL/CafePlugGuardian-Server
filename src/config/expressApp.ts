@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import methodOverride from 'method-override';
 import apiRouter from '../routes/apiRoute';
-import {errorHandler} from "../helpers/errorHandler";
+import errorHandler from "../helpers/errorHandler";
 
 function configureExpressApp() {
   const app = express();
