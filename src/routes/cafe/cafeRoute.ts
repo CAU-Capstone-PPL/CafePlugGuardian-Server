@@ -68,7 +68,7 @@ router.post('/:cafeId/pin', wrapAsync(async (req: Request, res: Response)=> {
  * get /api/cafe/:cafeId/blockingLog
  * params: cafeId (카페 식별 번호)
  */
-router.post('/:cafeId/blockingLog', wrapAsync(async (req: Request, res: Response)=> {
+router.get('/:cafeId/blockingLog', wrapAsync(async (req: Request, res: Response)=> {
   const cafeId = Number(req.params.cafeId);
 
   const getCafePlugBlockingLogResponse = await CafeService.getCafePlugBlockingLog(cafeId);

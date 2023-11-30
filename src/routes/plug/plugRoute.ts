@@ -94,7 +94,7 @@ router.post('/:plugId/use', wrapAsync(async (req: Request, res: Response) => {
 
 /**
  * 플러그 사용 종료 API
- * post: /api/plug/:plugId/stop
+ * patch: /api/plug/:plugId/stop
  * params: plugId (플러그 식별 번호)
  */
 router.patch('/:plugId/stop', wrapAsync(async (req: Request, res: Response) => {
