@@ -8,7 +8,7 @@ interface IPlug extends Document {
   subGroup: string;
   plugName: string;
   plugDescription: string;
-  useStatus: boolean;
+  useStatus: Boolean;
 }
 
 const plugScheme: Schema = new Schema<IPlug>({
