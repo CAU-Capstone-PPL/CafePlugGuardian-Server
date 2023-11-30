@@ -18,7 +18,7 @@ const plugScheme: Schema = new Schema<IPlug>({
   cafeId: { type: Number },
   subGroup: { type: String },
   plugName: { type: String, required: true },
-  plugDescription: { type: String },
+  plugDescription: { type: String, required: true },
   useStatus: { type: Boolean, required: true }
 });
 
