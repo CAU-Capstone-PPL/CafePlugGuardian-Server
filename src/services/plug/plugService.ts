@@ -70,8 +70,10 @@ class PlugService {
 
       const nowDate = new Date();
       const timeDiff = nowDate.getTime() - usePlugLog.startTime.getTime();
-      runningHours = timeDiff / (1000 * 60 * 60);
-      runningMinutes = timeDiff / (1000 * 60);
+      const timeDiffMinute = Math.floor(timeDiff / (1000 * 60));
+
+      runningHours = Math.floor(timeDiffMinute / 60);
+      runningMinutes = timeDiffMinute % 60;
 
       assignPower = 5.0;
       usedPower = 3.0;
