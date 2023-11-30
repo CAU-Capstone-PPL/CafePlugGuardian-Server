@@ -118,6 +118,9 @@ class PlugService {
     if (!plug) {
       throw new HttpError(BaseResponseStatus.UNKNOWN_PLUG);
     }
+    if (plug.useStatus) {
+      throw new HttpError(BaseResponseStatus.USED_PLUG);
+    }
 
     const pin = await Pins.findOne({ pinNumber: pinNumber, cafeId: plug.cafeId, validStatus: true });
     if(!pin) {
@@ -132,6 +135,9 @@ class PlugService {
     if (pin.issueTime.getTime() < oneHourAgo.getTime()) {
       throw new HttpError(BaseResponseStatus.UNKNOWN_PIN);
     }
+
+    plug.useStatus = true;
+    await plug.save();
 
     const lastPlugLog = await PlugLogs.findOne().sort({ plugUseId: -1 });
     const plugUseId = lastPlugLog ? lastPlugLog.plugUseId + 1 : 1;
