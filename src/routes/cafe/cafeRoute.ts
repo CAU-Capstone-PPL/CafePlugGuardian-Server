@@ -24,10 +24,10 @@ router.post('/', wrapAsync(async (req: Request, res: Response) => {
 /**
  * 카페 목록 API
  * get: /api/cafe
- * params: userId (카페 주인 userId)
+ * query: userId (카페 주인 userId)
  */
 router.get('/', wrapAsync(async (req: Request, res: Response) => {
-  const userId = Number(req.params.userId);
+  const userId = Number(req.query.userId);
 
   const cafeListResponse = await CafeService.getCafeList(userId);
   const responseStatus = BaseResponseStatus.SUCCESS;
