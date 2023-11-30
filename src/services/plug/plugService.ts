@@ -15,7 +15,7 @@ class PlugService {
       topic: `plug_${plugId}`,
       isConnected: false,
       plugName: `plug_${plugId}`,
-      plugDescription: '',
+      plugDescription: ' ',
       useStatus: false
     });
     await plug.save();
