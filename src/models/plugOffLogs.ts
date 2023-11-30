@@ -2,6 +2,7 @@ import { Document, Schema, model } from 'mongoose';
 
 interface IPlugOffLog extends Document {
   plugId: number;
+  plugName: string;
   plugUseId: number;
   type: string;
   plugOffTime: Date;
@@ -11,6 +12,7 @@ interface IPlugOffLog extends Document {
 
 const plugOffLog: Schema = new Schema<IPlugOffLog>({
   plugId: { type: Number, required: true },
+  plugName: { type: String, required: true },
   plugUseId: { type: Number, required: true },
   type: { type: String, required: true },
   plugOffTime: { type: Date, required: true },

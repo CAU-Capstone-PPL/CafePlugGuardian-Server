@@ -3,6 +3,7 @@ import { Document, Schema, model } from 'mongoose';
 interface IPlugLog extends Document {
   plugUseId: number;
   plugId: number;
+  plugName: string;
   cafeId: number;
   userId: number;
   useStatus: boolean;
@@ -15,6 +16,7 @@ interface IPlugLog extends Document {
 const plugLogScheme: Schema = new Schema<IPlugLog>({
   plugUseId: { type: Number, required: true, unique: true },
   plugId: { type: Number, required: true },
+  plugName: { type: String, required: true },
   cafeId: { type: Number, required: true },
   userId: { type: Number },
   useStatus: { type: Boolean, required: true },

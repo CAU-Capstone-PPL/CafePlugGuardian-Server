@@ -106,4 +106,18 @@ router.patch('/:plugId/stop', wrapAsync(async (req: Request, res: Response) => {
   return res.status(responseStatus.status).json(response(responseStatus, stopPlugResponse));
 }));
 
+/**
+ * 관리자용 앱 플러그별 비허용 기기 차단 로그
+ * get: /api/plug/:plugId/blockingLog
+ * params: plugId (플러그 식별 번호)
+ */
+router.get('/:plugId/blockingLog', wrapAsync(async (req: Request, res: Response)=> {
+  const plugId = Number(req.params.plugId);
+
+  const getBlockingLogResponse = await PlugService.getPlugBlockingLog(plugId);
+  const responseStatus = BaseResponseStatus.SUCCESS;
+
+  return res.status(responseStatus.status).json(response(responseStatus, getBlockingLogResponse));
+}));
+
 export default router;

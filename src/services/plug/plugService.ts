@@ -3,6 +3,7 @@ import Pins from '../../models/pins';
 import PlugLogs from '../../models/plugLogs';
 import {BaseResponseStatus} from '../../helpers/baseResponseStatus';
 import HttpError from '../../helpers/httpError';
+import PlugOffLogs from '../../models/plugOffLogs';
 
 class PlugService {
   async newPlug() {
@@ -138,6 +139,7 @@ class PlugService {
     const plugLog = new PlugLogs({
       plugUseId: plugUseId,
       plugId: plug.plugId,
+      plugName: plug.plugName,
       cafeId: plug.cafeId,
       useStatus: true,
       startTime: nowDate,
@@ -171,6 +173,40 @@ class PlugService {
     await plugLog.save();
 
     return;
+  }
+
+  async getPlugBlockingLog(plugId: number) {
+    const plugOffLog = await PlugOffLogs.find({ plugId: plugId, type: 'Blocking' }).sort({ plugOffTime: -1 }).limit(100);
+    const result = [];
+
+    for(let i = 0; i < plugOffLog.length; i++) {
+      const plugLog = plugOffLog[i];
+      const log = {
+        plugId: plugLog.plugId,
+        plugName: plugLog.plugName,
+        type: plugLog.type,
+        plugOffTime: {
+          'date': {
+            'year': plugLog.plugOffTime.getFullYear(),
+            'month': plugLog.plugOffTime.getMonth() + 1,
+            'day': plugLog.plugOffTime.getDate()
+          },
+          'time': {
+            'hours': plugLog.plugOffTime.getHours(),
+            'minutes': plugLog.plugOffTime.getMinutes()
+          }
+        },
+        ownerCheck: plugLog.ownerCheck,
+        isToggleOn: plugLog.isToggleOn
+      };
+      result.push(log);
+    }
+
+    return result;
+  }
+
+  async getPlugOffLog() {
+
   }
 }
 
