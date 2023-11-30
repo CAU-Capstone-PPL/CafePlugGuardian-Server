@@ -63,4 +63,18 @@ router.post('/:cafeId/pin', wrapAsync(async (req: Request, res: Response)=> {
   return res.status(responseStatus.status).json(response(responseStatus, getPinNumberResponse));
 }));
 
+/**
+ * 관리자용 앱 카페 내 비허용 기기 차단 로그
+ * get /api/cafe/:cafeId/blockingLog
+ * params: cafeId (카페 식별 번호)
+ */
+router.post('/:cafeId/blockingLog', wrapAsync(async (req: Request, res: Response)=> {
+  const cafeId = Number(req.params.cafeId);
+
+  const getCafePlugBlockingLogResponse = await CafeService.getCafePlugBlockingLog(cafeId);
+  const responseStatus = BaseResponseStatus.SUCCESS;
+
+  return res.status(responseStatus.status).json(response(responseStatus, getCafePlugBlockingLogResponse));
+}));
+
 export default router;

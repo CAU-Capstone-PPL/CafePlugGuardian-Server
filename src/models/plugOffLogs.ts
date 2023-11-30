@@ -1,9 +1,9 @@
 import { Document, Schema, model } from 'mongoose';
 
 interface IPlugOffLog extends Document {
+  plugUseId: number;
   plugId: number;
   plugName: string;
-  plugUseId: number;
   type: string;
   plugOffTime: Date;
   ownerCheck: boolean;
@@ -11,9 +11,9 @@ interface IPlugOffLog extends Document {
 }
 
 const plugOffLog: Schema = new Schema<IPlugOffLog>({
+  plugUseId: { type: Number, required: true },
   plugId: { type: Number, required: true },
   plugName: { type: String, required: true },
-  plugUseId: { type: Number, required: true },
   type: { type: String, required: true },
   plugOffTime: { type: Date, required: true },
   ownerCheck: { type: Boolean, required: true },

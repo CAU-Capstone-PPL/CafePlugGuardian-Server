@@ -2,6 +2,7 @@ import Cafes from '../../models/cafes';
 import Plugs from '../../models/plugs';
 import Pins from '../../models/pins';
 import plugService from '../plug/plugService';
+import PlugOffLogs from '../../models/plugOffLogs';
 
 class CafeService {
   async addCafe(userId: number, cafeName: string) {
@@ -92,6 +93,34 @@ class CafeService {
     };
 
     return result;
+  }
+
+  async getCafePlugBlockingLog(cafeId: number) {
+    const cafePlugOffLog = await PlugOffLogs.find({ cafeId: cafeId, type: 'Blocking' }).sort({ plugOffTime: -1 }).limit(100);
+    const result = [];
+
+    for(let i = 0; i < cafePlugOffLog.length; i++) {
+      const plugLog = cafePlugOffLog[i];
+      const log = {
+        plugId: plugLog.plugId,
+        plugName: plugLog.plugName,
+        type: plugLog.type,
+        plugOffTime: {
+          'date': {
+            'year': plugLog.plugOffTime.getFullYear(),
+            'month': plugLog.plugOffTime.getMonth() + 1,
+            'day': plugLog.plugOffTime.getDate()
+          },
+          'time': {
+            'hours': plugLog.plugOffTime.getHours(),
+            'minutes': plugLog.plugOffTime.getMinutes()
+          }
+        },
+        ownerCheck: plugLog.ownerCheck,
+        isToggleOn: plugLog.isToggleOn
+      };
+      result.push(log);
+    }
   }
 }
 

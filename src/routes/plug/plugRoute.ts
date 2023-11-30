@@ -114,10 +114,10 @@ router.patch('/:plugId/stop', wrapAsync(async (req: Request, res: Response) => {
 router.get('/:plugId/blockingLog', wrapAsync(async (req: Request, res: Response)=> {
   const plugId = Number(req.params.plugId);
 
-  const getBlockingLogResponse = await PlugService.getPlugBlockingLog(plugId);
+  const getPlugBlockingLogResponse = await PlugService.getPlugBlockingLog(plugId);
   const responseStatus = BaseResponseStatus.SUCCESS;
 
-  return res.status(responseStatus.status).json(response(responseStatus, getBlockingLogResponse));
+  return res.status(responseStatus.status).json(response(responseStatus, getPlugBlockingLogResponse));
 }));
 
 export default router;
