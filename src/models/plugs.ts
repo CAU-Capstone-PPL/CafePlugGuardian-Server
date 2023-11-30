@@ -19,7 +19,7 @@ const plugScheme: Schema = new Schema<IPlug>({
   subGroup: { type: String },
   plugName: { type: String, required: true },
   plugDescription: { type: String },
-  useStatus: { type: Schema.Types.Boolean, required: true }
+  useStatus: { type: Boolean, required: true }
 });
 
 const Plugs = model<IPlug>('plugs', plugScheme);
