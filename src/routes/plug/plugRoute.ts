@@ -120,4 +120,18 @@ router.get('/:plugId/blockingLog', wrapAsync(async (req: Request, res: Response)
   return res.status(responseStatus.status).json(response(responseStatus, getPlugBlockingLogResponse));
 }));
 
+/**
+ * 손님용 웹 플러그 토글 off 로그
+ * get: /api/plug/:plugId/plugOffLog
+ * params: plugId (플러그 식별 번호)
+ */
+router.get('/:plugId/plugOffLog', wrapAsync(async (req: Request, res: Response)=> {
+  const plugId = Number(req.params.plugId);
+
+  const getPlugOffLogResponse = await PlugService.getPlugOffLog(plugId);
+  const responseStatus = BaseResponseStatus.SUCCESS;
+
+  return res.status(responseStatus.status).json(response(responseStatus, getPlugOffLogResponse));
+}));
+
 export default router;

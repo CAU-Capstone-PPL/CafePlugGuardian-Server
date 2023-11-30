@@ -213,8 +213,39 @@ class PlugService {
     return result;
   }
 
-  async getPlugOffLog() {
+  async getPlugOffLog(plugId: number) {
+    const result = [];
+    const lastPlugLog = await PlugLogs.findOne({ plugId: plugId }).sort({ plugUseId: -1 });
 
+    if(lastPlugLog && lastPlugLog.useStatus) {
+      const plugUseId = lastPlugLog.plugUseId;
+      const plugOffLogs = await PlugOffLogs.find({ plugUseId: plugUseId }).sort({ plugOffTime: -1 });
+
+      for(let i = 0; i < plugOffLogs.length; i++) {
+        const plugLog = plugOffLogs[i];
+        const log = {
+          plugId: plugLog.plugId,
+          plugName: plugLog.plugName,
+          type: plugLog.type,
+          plugOffTime: {
+            'date': {
+              'year': plugLog.plugOffTime.getFullYear(),
+              'month': plugLog.plugOffTime.getMonth() + 1,
+              'day': plugLog.plugOffTime.getDate()
+            },
+            'time': {
+              'hours': plugLog.plugOffTime.getHours(),
+              'minutes': plugLog.plugOffTime.getMinutes()
+            }
+          },
+          ownerCheck: plugLog.ownerCheck,
+          isToggleOn: plugLog.isToggleOn
+        };
+        result.push(log);
+      }
+    }
+
+    return result;
   }
 }
 
