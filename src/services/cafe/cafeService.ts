@@ -121,6 +121,8 @@ class CafeService {
       };
       result.push(log);
     }
+
+    return result;
   }
 }
 
