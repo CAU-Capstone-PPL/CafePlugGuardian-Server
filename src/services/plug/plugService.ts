@@ -121,7 +121,7 @@ class PlugService {
     }
 
     const commandTopic = `cmnd/${plug.topic}/PlugToggle`;
-    const commandMessage = toggle ? '0' : '1';
+    const commandMessage = toggle ? '1' : '0';
     const resultTopic = `stat/${plug.topic}/RESULT`;
 
     const result = await new Promise((resolve, reject) => {

@@ -21,7 +21,7 @@ function connectMQTTBroker() {
 
   mqttClient.on('connect', () => {
     console.log('MQTT Broker에 연결되었습니다.');
-    //mqttClient.subscribe('+/tasmota_9A3FB8/+');
+    mqttClient.subscribe('+/tasmota_9A3FB8/+');
     //mqttClient.subscribe('+/tasmota_6369CC/+');
   });
 
