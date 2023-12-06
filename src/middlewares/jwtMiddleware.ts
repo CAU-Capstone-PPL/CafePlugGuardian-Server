@@ -11,7 +11,7 @@ declare global {
   }
 }
 
-export function authenticateToken(req: Request, res: Response, next: NextFunction) {
+export function requireToken(req: Request, res: Response, next: NextFunction) {
   const secretKey: string | undefined = process.env.SECRET_KEY;
 
   if (secretKey == undefined) {
@@ -22,6 +22,29 @@ export function authenticateToken(req: Request, res: Response, next: NextFunctio
 
   if (token == null) {
     throw new HttpError(BaseResponseStatus.JWT_TOKEN_NULL);
+  }
+
+  jwt.verify(token, secretKey, (err: any, user: any) => {
+    if (err) {
+      throw new HttpError(BaseResponseStatus.JWT_FORBIDDEN);
+    }
+    req.user = user;
+    next();
+  });
+}
+
+export function optionalToken(req: Request, res: Response, next: NextFunction) {
+  const secretKey: string | undefined = process.env.SECRET_KEY;
+
+  if (secretKey == undefined) {
+    throw new HttpError(BaseResponseStatus.SECRET_KEY_UNDEFINED);
+  }
+
+  const token = req.header('Authorization')?.split('Bearer ')[1];
+
+  if (token == null) {
+    req.user = null;
+    return next();
   }
 
   jwt.verify(token, secretKey, (err: any, user: any) => {
