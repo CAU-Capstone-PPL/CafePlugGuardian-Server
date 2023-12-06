@@ -6,10 +6,6 @@ import HttpError from '../../helpers/httpError';
 import PlugOffLogs from '../../models/plugOffLogs';
 import {mqttClient} from '../../config/mqtt';
 
-interface IToggleMqtt {
-  toggle: string;
-}
-
 class PlugService {
   async newPlug() {
     const lastPlug = await Plugs.findOne().sort({ plugId: -1 });
