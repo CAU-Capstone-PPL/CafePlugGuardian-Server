@@ -44,10 +44,10 @@ router.get('/menu', wrapAsync(async (req: Request, res: Response) => {
  * params: cafeId, menuName, menuPrice, menuDescription
  */
 router.post('/menu', wrapAsync(async (req: Request, res: Response) => {
-  const cafeId = Number(req.params.cafeId);
-  const menuName = req.params.menuName;
-  const menuPrice = Number(req.params.menuPrice);
-  const menuDescription = req.params.menuDescription;
+  const cafeId = req.body.cafeId;
+  const menuName = req.body.menuName;
+  const menuPrice = req.body.menuPrice;
+  const menuDescription = req.body.menuDescription;
 
   const addMenuResponse = await mileageService.addMenu(cafeId, menuName, menuPrice, menuDescription);
   const responseStatus = BaseResponseStatus.SUCCESS;
