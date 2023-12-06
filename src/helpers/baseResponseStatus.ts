@@ -38,7 +38,10 @@ const BaseResponseStatus: any = {
   OFFLINE_PLUG: { status: 400, success: false, message: '전원이 연결되지 않은 플러그입니다.' },
 
   //PIN
-  UNKNOWN_PIN: { status: 403, success: false, message: 'PIN 번호가 유효하지 않습니다.' }
+  UNKNOWN_PIN: { status: 403, success: false, message: 'PIN 번호가 유효하지 않습니다.' },
+
+  //마일리지
+  REQUIRE_MENU_CONDITION: { status: 400, success: false, message: 'cafeId 또는 plugId가 필요합니다.' }
 };
 
 export { IBaseResponseStatus, BaseResponseStatus };
