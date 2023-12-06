@@ -6,6 +6,10 @@ import HttpError from '../../helpers/httpError';
 import PlugOffLogs from '../../models/plugOffLogs';
 import {mqttClient} from '../../config/mqtt';
 
+interface IToggleMqtt {
+  toggle: string;
+}
+
 class PlugService {
   async newPlug() {
     const lastPlug = await Plugs.findOne().sort({ plugId: -1 });
@@ -116,12 +120,30 @@ class PlugService {
       throw new HttpError(BaseResponseStatus.NOT_CONNECTED_PLUG);
     }
 
-    if (toggle) {
-      mqttClient.publish(`cmnd/${plug.topic}/PlugToggle`, '0');
-    } else {
-      mqttClient.publish(`cmnd/${plug.topic}/PlugToggle`, '1');
-    }
-    return;
+    const commandTopic = `cmnd/${plug.topic}/PlugToggle`;
+    const commandMessage = toggle ? '0' : '1';
+    const resultTopic = `stat/${plug.topic}/RESULT`;
+
+    const result = await new Promise((resolve, reject) => {
+      const timeout = setTimeout(() => {
+        mqttClient.unsubscribe(resultTopic);
+        reject(new HttpError(BaseResponseStatus.OFFLINE_PLUG));
+      }, 5000);
+
+      mqttClient.publish(commandTopic, commandMessage, () => {
+        mqttClient.subscribe(resultTopic);
+
+        mqttClient.on('message', (topic: string, message: Buffer) => {
+          if(topic == resultTopic) {
+            mqttClient.unsubscribe(resultTopic);
+            clearTimeout(timeout);
+            resolve(JSON.parse(message.toString()));
+          }
+        });
+      });
+    });
+
+    return result;
   }
 
   async usePlug(plugId: number, pinNumber: number) {

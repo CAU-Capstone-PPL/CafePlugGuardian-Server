@@ -21,12 +21,12 @@ function connectMQTTBroker() {
 
   mqttClient.on('connect', () => {
     console.log('MQTT Broker에 연결되었습니다.');
-    mqttClient.subscribe('+/tasmota_9A3FB8/+');
-    mqttClient.subscribe('+/tasmota_6369CC/+');
+    //mqttClient.subscribe('+/tasmota_9A3FB8/+');
+    //mqttClient.subscribe('+/tasmota_6369CC/+');
   });
 
   mqttClient.on('message', (topic: string, message: Buffer) => {
-    console.log(`Received message on topic ${topic}: ${message.toString()}`);
+    console.log(`mqtt 테스트 ${topic}: ${message.toString()}`);
 
     try {
       const json: Json = JSON.parse(message.toString());
