@@ -40,6 +40,9 @@ const BaseResponseStatus: any = {
   //PIN
   UNKNOWN_PIN: { status: 403, success: false, message: 'PIN 번호가 유효하지 않습니다.' },
 
+  //카페
+  UNKNOWN_CAFE: { status: 404, success: false, message: '존재하지 않은 카페입니다.' },
+
   //마일리지
   REQUIRE_MENU_CONDITION: { status: 400, success: false, message: 'cafeId 또는 plugId가 필요합니다.' }
 };

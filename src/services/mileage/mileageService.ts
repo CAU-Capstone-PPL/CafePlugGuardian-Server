@@ -3,6 +3,7 @@ import HttpError from '../../helpers/httpError';
 import {BaseResponseStatus} from '../../helpers/baseResponseStatus';
 import Plugs from '../../models/plugs';
 import MileageMenus from '../../models/mileageMenus';
+import Cafes from '../../models/cafes';
 
 class MileageService {
   async getMileage(userId: number, cafeId: number) {
@@ -39,7 +40,7 @@ class MileageService {
       cafeId = plug.cafeId;
     }
 
-    const menus = await MileageMenus.find({ cafeId: cafeId });
+    const menus = await MileageMenus.find({ cafeId: cafeId, isDeleted: false });
     for(let i = 0; i < menus.length; i++) {
       const menu = menus[i];
       const menuResponse = {
@@ -52,6 +53,28 @@ class MileageService {
     }
 
     return result;
+  }
+
+  async addMenu(cafeId: number, menuName: string, menuPrice: number, menuDescription: string) {
+    const cafe = await Cafes.findOne({ cafeId: cafeId });
+    if(!cafe) {
+      throw new HttpError(BaseResponseStatus.UNKNOWN_CAFE);
+    }
+
+    const lastMenu = await MileageMenus.findOne().sort({ menuId: -1 });
+    const menuId = lastMenu ? lastMenu.menuId + 1 : 1;
+
+    const menu = new MileageMenus({
+      menuId: menuId,
+      cafeId: cafeId,
+      isDeleted: false,
+      menuName: menuName,
+      menuPrice: menuPrice,
+      menuDescription: menuDescription
+    });
+    await menu.save();
+
+    return;
   }
 }
 

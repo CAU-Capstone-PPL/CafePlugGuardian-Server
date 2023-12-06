@@ -38,4 +38,21 @@ router.get('/menu', wrapAsync(async (req: Request, res: Response) => {
   return res.status(responseStatus.status).json(response(responseStatus, getMenuResponse));
 }));
 
+/**
+ * 마일리지 상점 메뉴 추가 API
+ * post: /api/mileage/menu
+ * params: cafeId, menuName, menuPrice, menuDescription
+ */
+router.post('/menu', wrapAsync(async (req: Request, res: Response) => {
+  const cafeId = Number(req.params.cafeId);
+  const menuName = req.params.menuName;
+  const menuPrice = Number(req.params.menuPrice);
+  const menuDescription = req.params.menuDescription;
+
+  const addMenuResponse = await mileageService.addMenu(cafeId, menuName, menuPrice, menuDescription);
+  const responseStatus = BaseResponseStatus.SUCCESS;
+
+  return res.status(responseStatus.status).json(response(responseStatus, addMenuResponse));
+}));
+
 export default router;
