@@ -31,12 +31,6 @@ function connectMQTTBroker() {
     try {
       const json: Json = JSON.parse(message.toString());
       const current = json['current'];
-      console.log();
-      console.log();
-
-      for(let i = 0; i < current.length; i++) {
-        console.log(current[i]);
-      }
     } catch (e) {
     }
   });

@@ -4,6 +4,7 @@ import PlugLogs from '../../models/plugLogs';
 import {BaseResponseStatus} from '../../helpers/baseResponseStatus';
 import HttpError from '../../helpers/httpError';
 import PlugOffLogs from '../../models/plugOffLogs';
+import {mqttClient} from '../../config/mqtt';
 
 class PlugService {
   async newPlug() {
@@ -107,11 +108,18 @@ class PlugService {
   }
 
   async togglePlug(plugId: number, toggle: boolean) {
-    //toggle true: turn on, false: turn off
+    const plug = await Plugs.findOne({ plugId: plugId });
+
+    if(!plug) {
+      throw new HttpError(BaseResponseStatus.UNKNOWN_PLUG);
+    } else if(!plug.isConnected) {
+      throw new HttpError(BaseResponseStatus.NOT_CONNECTED_PLUG);
+    }
+
     if (toggle) {
-      //mqtt로 toggle on 하는 코드
+      mqttClient.publish(`cmnd/${plug.topic}/PlugToggle`, '0');
     } else {
-      //mqtt로 toggle off 하는 코드
+      mqttClient.publish(`cmnd/${plug.topic}/PlugToggle`, '1');
     }
     return;
   }
