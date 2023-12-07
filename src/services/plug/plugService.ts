@@ -150,7 +150,7 @@ class PlugService {
         mqttClient.on('message', (topic: string, message: Buffer) => {
           if(topic == resultTopic) {
             const jsonData = JSON.parse(message.toString());
-            if('measure_toggle' in jsonData) {
+            if('toggle' in jsonData) {
               clearTimeout(timeout);
               resolve(JSON.parse(message.toString()));
             }
