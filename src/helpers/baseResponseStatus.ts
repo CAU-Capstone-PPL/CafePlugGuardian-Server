@@ -35,7 +35,7 @@ const BaseResponseStatus: any = {
   NOT_CONNECTED_PLUG: { status: 403, success: false, message: '연결되지 않은 플러그입니다.' },
   USED_PLUG: { status: 400, success: false, message: '이미 사용 중인 플러그 입니다.' },
   NOT_USED_PLUG: { status: 400, success: false, message: '사용 중이지 않은 플러그입니다.' },
-  OFFLINE_PLUG: { status: 400, success: false, message: '전원이 연결되지 않은 플러그입니다.' },
+  OFFLINE_PLUG: { status: 400, success: false, message: '전원이 연결되지 않았거나 네트워크 문제가 있는 플러그입니다.' },
 
   //PIN
   UNKNOWN_PIN: { status: 403, success: false, message: 'PIN 번호가 유효하지 않습니다.' },

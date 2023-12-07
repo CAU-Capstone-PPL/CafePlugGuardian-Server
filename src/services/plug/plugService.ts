@@ -165,6 +165,8 @@ class PlugService {
       throw new HttpError(BaseResponseStatus.UNKNOWN_PIN);
     }
 
+    await this.togglePlug(plugId, true);
+
     plug.useStatus = true;
     await plug.save();
 
@@ -176,7 +178,7 @@ class PlugService {
       plugId: plug.plugId,
       plugName: plug.plugName,
       cafeId: plug.cafeId,
-      useStatus: true,
+      useStatus: plug.useStatus,
       startTime: nowDate,
       assignPower: 0,
       usedPower: 0
@@ -201,6 +203,8 @@ class PlugService {
     if(!plugLog) {
       throw new HttpError(BaseResponseStatus.IMPOSSIBLE_ERROR);
     }
+
+    await this.togglePlug(plugId, false);
 
     plugLog.useStatus = false;
     plugLog.endTime = new Date();
