@@ -47,10 +47,10 @@ router.patch('/', requireToken, wrapAsync(async (req: Request, res: Response) =>
  */
 router.patch('/remainPower', requireToken, wrapAsync(async (req: Request, res: Response) => {
   const userId = req.user.userId;
-  const plugUseId = req.body.plugUseId;
+  const plugId = req.body.plugId;
   const mileage = req.body.mileage;
 
-  const addRemainPowerMileageResponse = await mileageService.addRemainPowerMileage(userId, plugUseId, mileage);
+  const addRemainPowerMileageResponse = await mileageService.addRemainPowerMileage(userId, plugId, mileage);
   const responseStatus = BaseResponseStatus.SUCCESS;
 
   return res.status(responseStatus.status).json(response(responseStatus, addRemainPowerMileageResponse));

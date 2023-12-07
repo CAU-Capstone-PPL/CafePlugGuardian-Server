@@ -34,8 +34,8 @@ class MileageService {
     };
   }
 
-  async addRemainPowerMileage(userId: number, plugUseId: number, mileage: number) {
-    const plugLog = await PlugLogs.findOne({ plugUseId: plugUseId });
+  async addRemainPowerMileage(userId: number, plugId: number, mileage: number) {
+    const plugLog = await PlugLogs.findOne({ plugId: plugId });
     if(!plugLog) {
       throw new HttpError(BaseResponseStatus.UNKNOWN_PLUG_LOG);
     }
