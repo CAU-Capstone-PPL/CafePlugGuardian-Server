@@ -5,14 +5,6 @@ import axios, {AxiosError, AxiosResponse} from 'axios';
 let mqttClient: MqttClient;
 const topicPattern = /^stat\/([^\/]+)\/RESULT$/;
 
-interface Sample {
-  sample: number;
-}
-
-interface Json {
-  current: Sample[];
-}
-
 function connectMQTTBroker() {
   const mqttBrokerUrl: string | undefined = process.env.MQTT_URL;
 

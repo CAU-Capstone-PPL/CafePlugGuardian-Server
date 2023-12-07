@@ -131,9 +131,12 @@ class PlugService {
 
         mqttClient.on('message', (topic: string, message: Buffer) => {
           if(topic == resultTopic) {
-            mqttClient.unsubscribe(resultTopic);
-            clearTimeout(timeout);
-            resolve(JSON.parse(message.toString()));
+            const jsonData = JSON.parse(message.toString());
+            if('toggle' in jsonData) {
+              mqttClient.unsubscribe(resultTopic);
+              clearTimeout(timeout);
+              resolve(JSON.parse(message.toString()));
+            }
           }
         });
       });
