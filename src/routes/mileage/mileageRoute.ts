@@ -44,7 +44,7 @@ router.patch('/', requireToken, wrapAsync(async (req: Request, res: Response) =>
  * patch: /api/mileage/testGain
  * body: userId, cafeId, mileage
  */
-router.patch('/testGain', requireToken, wrapAsync(async (req: Request, res: Response) => {
+router.patch('/testGain', wrapAsync(async (req: Request, res: Response) => {
   const userId = req.body.userId;
   const cafeId = req.body.cafeId;
   const mileage = req.body.mileage;
