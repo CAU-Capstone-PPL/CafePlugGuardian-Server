@@ -39,18 +39,29 @@ function connectMQTTBroker() {
         if('current' in jsonData) {
           const plugLog = await PlugLogs.findOne({ topic: device_topic, useStatus: true });
           if(plugLog) {
-            plugLog.usedPower += jsonData['power'] * 5 / 3600;
-            if(plugLog.usedPower >= plugLog.assignPower) {
-              await PlugService.blockingPlug(plugLog.plugUseId, 'PowerLimit');
-            } else if(jsonData.current >= 0.15) {
-              if(!plugLog.isCheckPermit) {
-                plugLog.isCheckPermit = true;
-                await plugLog.save();
-                mqttClient.publish(`cmnd/${device_topic}/SamplingCurrent`, '0');
+            if(jsonData['toggle'] == 1) {
+              plugLog.usedPower += jsonData['power'] * 5 / 3600;
+              if(plugLog.usedPower >= plugLog.assignPower) {
+                await PlugService.blockingPlug(plugLog.plugUseId, 'PowerLimit');
+              } else if(jsonData.current >= 1.0) {
+                await PlugService.blockingPlug(plugLog.plugUseId, 'Blocking');
+              } else if(jsonData.current >= 0.15) {
+                if(!plugLog.isCheckPermit) {
+                  plugLog.isCheckPermit = true;
+                  await plugLog.save();
+                  mqttClient.publish(`cmnd/${device_topic}/SamplingCurrent`, '0');
+                }
+              } else if(jsonData.current < 0.15) {
+                if(plugLog.isCheckPermit) {
+                  plugLog.isCheckPermit = false;
+                  await plugLog.save();
+                }
               }
-            } else if(jsonData.current < 0.15) {
-              plugLog.isCheckPermit = false;
-              await plugLog.save();
+            } else {
+              if(plugLog.isCheckPermit) {
+                plugLog.isCheckPermit = false;
+                await plugLog.save();
+              }
             }
           }
         } else if('current_sampling' in jsonData) {
