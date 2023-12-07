@@ -51,20 +51,20 @@ class CafeService {
     return Math.floor(1000 + Math.random() * 9000);
   }
 
-  async getPinNumber(cafeId: number) {
+  async getPinNumber(cafeId: number, count: number) {
     const nowDate = new Date();
     const oneHourAgo = new Date();
     oneHourAgo.setHours(oneHourAgo.getHours() - 1);
 
     await Pins.updateMany(
-      { issueTime: { $lt: oneHourAgo }, validStatus: true },
-      { $set: { validStatus: false } }
+      { issueTime: { $lt: oneHourAgo }, validCount: { $gt: 0 } },
+      { $set: { validCount: 0 } }
     );
 
     let pinNumber: number;
     while (true) {
       pinNumber = this.generateRandomPinNumber();
-      if (!(await Pins.findOne({ pinNumber: pinNumber, cafeId: cafeId, validStatus: true }))) {
+      if (!(await Pins.findOne({ pinNumber: pinNumber, cafeId: cafeId, validCount: { $gt: 0 } }))) {
         break;
       }
     }
@@ -73,7 +73,7 @@ class CafeService {
       pinNumber: pinNumber,
       cafeId: cafeId,
       issueTime: nowDate,
-      validStatus: true
+      validCount: count
     });
     await pin.save();
 
@@ -89,7 +89,8 @@ class CafeService {
           'hours': nowDate.getHours(),
           'minutes': nowDate.getMinutes()
         }
-      }
+      },
+      'validCount': count
     };
 
     return result;

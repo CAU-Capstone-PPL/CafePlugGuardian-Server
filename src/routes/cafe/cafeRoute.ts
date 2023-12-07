@@ -56,8 +56,9 @@ router.get('/:cafeId/plug', wrapAsync(async (req: Request, res: Response) => {
  */
 router.post('/:cafeId/pin', wrapAsync(async (req: Request, res: Response)=> {
   const cafeId = Number(req.params.cafeId);
+  const count = Number(req.query.count);
 
-  const getPinNumberResponse = await CafeService.getPinNumber(cafeId);
+  const getPinNumberResponse = await CafeService.getPinNumber(cafeId, count);
   const responseStatus = BaseResponseStatus.SUCCESS;
 
   return res.status(responseStatus.status).json(response(responseStatus, getPinNumberResponse));

@@ -2,7 +2,6 @@ import {connect, MqttClient} from 'mqtt';
 import Plugs from '../models/plugs';
 import axios, {AxiosError, AxiosResponse} from 'axios';
 import PlugLogs from '../models/plugLogs';
-import plugService from '../services/plug/plugService';
 import PlugService from '../services/plug/plugService';
 
 let mqttClient: MqttClient;

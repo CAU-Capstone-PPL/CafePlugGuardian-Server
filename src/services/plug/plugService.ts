@@ -160,19 +160,22 @@ class PlugService {
       throw new HttpError(BaseResponseStatus.USED_PLUG);
     }
 
-    const pin = await Pins.findOne({ pinNumber: pinNumber, cafeId: plug.cafeId, validStatus: true });
+    const pin = await Pins.findOne({ pinNumber: pinNumber, cafeId: plug.cafeId, validCount: { $gt: 0 } });
     if(!pin) {
       throw new HttpError(BaseResponseStatus.UNKNOWN_PIN);
     }
-    pin.validStatus = false;
-    await pin.save();
 
     const nowDate = new Date();
     const oneHourAgo = new Date();
     oneHourAgo.setHours(oneHourAgo.getHours() - 1);
     if (pin.issueTime.getTime() < oneHourAgo.getTime()) {
+      pin.validCount = 0;
+      await pin.save();
       throw new HttpError(BaseResponseStatus.UNKNOWN_PIN);
     }
+
+    pin.validCount -= 1;
+    await pin.save();
 
     await this.togglePlug(plugId, true);
 
