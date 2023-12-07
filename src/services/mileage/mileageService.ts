@@ -83,6 +83,20 @@ class MileageService {
 
     return;
   }
+
+  async modifyMenu(menuId: number, menuName: string, menuPrice: number, menuDescription: string) {
+    const menu = await MileageMenus.findOne({ menuId: menuId });
+    if(!menu) {
+      throw new HttpError(BaseResponseStatus.UNKNOWN_MENU);
+    }
+
+    menu.menuName = menuName;
+    menu.menuPrice = menuPrice;
+    menu.menuDescription = menuDescription;
+    await menu.save();
+
+    return;
+  }
 }
 
 export default new MileageService();

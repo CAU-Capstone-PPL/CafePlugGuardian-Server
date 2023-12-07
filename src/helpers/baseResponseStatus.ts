@@ -44,7 +44,8 @@ const BaseResponseStatus: any = {
   UNKNOWN_CAFE: { status: 404, success: false, message: '존재하지 않은 카페입니다.' },
 
   //마일리지
-  REQUIRE_MENU_CONDITION: { status: 400, success: false, message: 'cafeId 또는 plugId가 필요합니다.' }
+  REQUIRE_MENU_CONDITION: { status: 400, success: false, message: 'cafeId 또는 plugId가 필요합니다.' },
+  UNKNOWN_MENU: { status: 404, success: false, message: '존재하지 않은 상품입니다.' }
 };
 
 export { IBaseResponseStatus, BaseResponseStatus };

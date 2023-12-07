@@ -41,7 +41,7 @@ router.get('/menu', wrapAsync(async (req: Request, res: Response) => {
 /**
  * 마일리지 상점 메뉴 추가 API
  * post: /api/mileage/menu
- * params: cafeId, menuName, menuPrice, menuDescription
+ * body: cafeId, menuName, menuPrice, menuDescription
  */
 router.post('/menu', wrapAsync(async (req: Request, res: Response) => {
   const cafeId = req.body.cafeId;
@@ -53,6 +53,23 @@ router.post('/menu', wrapAsync(async (req: Request, res: Response) => {
   const responseStatus = BaseResponseStatus.SUCCESS;
 
   return res.status(responseStatus.status).json(response(responseStatus, addMenuResponse));
+}));
+
+/**
+ * 마일리지 상점 메뉴 수정 API
+ * patch: /api/mileage/menu
+ * body: menuID, menuName, menuPrice, menuDescription
+ */
+router.patch('/menu', wrapAsync(async (req: Request, res: Response) => {
+  const menuId = req.body.menuId;
+  const menuName = req.body.menuName;
+  const menuPrice = req.body.menuPrice;
+  const menuDescription = req.body.menuDescription;
+
+  const modifyMenuResponse = await mileageService.modifyMenu(menuId, menuName, menuPrice, menuDescription);
+  const responseStatus = BaseResponseStatus.SUCCESS;
+
+  return res.status(responseStatus.status).json(response(responseStatus, modifyMenuResponse));
 }));
 
 export default router;
