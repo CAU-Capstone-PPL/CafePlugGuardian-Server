@@ -87,14 +87,14 @@ class PlugService {
       const response = await new Promise((resolve, reject) => {
         const timeout = setTimeout(() => {
           reject(new HttpError(BaseResponseStatus.OFFLINE_PLUG));
-        }, 5000);
+        }, 10000);
 
         mqttClient.publish(commandTopic, commandMessage, () => {
           mqttClient.on('message', (topic: string, message: Buffer) => {
             if(topic == resultTopic) {
               const jsonData = JSON.parse(message.toString());
               if('status_power' in jsonData) {
-                toggle = jsonData['status_toggle'] == 1;
+                toggle = jsonData['status_toggle'] == 'ON';
                 realTimePower = jsonData['status_power'];
                 clearTimeout(timeout);
                 resolve(JSON.parse(message.toString()));
