@@ -6,9 +6,16 @@ import MileageMenus from '../../models/mileageMenus';
 import Cafes from '../../models/cafes';
 
 class MileageService {
-  async getMileage(userId: number, cafeId: number) {
-    let mileageData = await UserMileages.findOne({ userId: userId, cafeId: cafeId });
+  async getMileage(userId: number, plugId: number) {
+    const plug = await Plugs.findOne({ plugId: plugId });
+    if(!plug) {
+      throw new HttpError(BaseResponseStatus.UNKNOWN_PLUG);
+    } else if(!plug.isConnected) {
+      throw new HttpError(BaseResponseStatus.NOT_CONNECTED_PLUG);
+    }
+    const cafeId = plug.cafeId;
 
+    let mileageData = await UserMileages.findOne({ userId: userId, cafeId: cafeId });
     if(!mileageData) {
       const mileage = new UserMileages({
         userId: userId,

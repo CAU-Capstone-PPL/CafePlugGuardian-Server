@@ -15,9 +15,9 @@ const router = Router();
  */
 router.get('/', requireToken, wrapAsync(async (req: Request, res: Response) => {
   const userId = req.user.userId;
-  const cafeId = Number(req.query.cafeId);
+  const plugId = Number(req.query.plugId);
 
-  const getMileageResponse = await mileageService.getMileage(userId, cafeId);
+  const getMileageResponse = await mileageService.getMileage(userId, plugId);
   const responseStatus = BaseResponseStatus.SUCCESS;
 
   return res.status(responseStatus.status).json(response(responseStatus, getMileageResponse));
