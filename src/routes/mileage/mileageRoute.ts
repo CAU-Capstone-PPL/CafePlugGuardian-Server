@@ -58,7 +58,7 @@ router.post('/menu', wrapAsync(async (req: Request, res: Response) => {
 /**
  * 마일리지 상점 메뉴 수정 API
  * patch: /api/mileage/menu
- * body: menuID, menuName, menuPrice, menuDescription
+ * body: menuId, menuName, menuPrice, menuDescription
  */
 router.patch('/menu', wrapAsync(async (req: Request, res: Response) => {
   const menuId = req.body.menuId;
@@ -70,6 +70,20 @@ router.patch('/menu', wrapAsync(async (req: Request, res: Response) => {
   const responseStatus = BaseResponseStatus.SUCCESS;
 
   return res.status(responseStatus.status).json(response(responseStatus, modifyMenuResponse));
+}));
+
+/**
+ * 마일리지 상점 메뉴 삭제 API
+ * delete: /api/mileage/menu
+ * body: menuId
+ */
+router.delete('/menu', wrapAsync(async (req: Request, res: Response) => {
+  const menuId = req.body.menuId;
+
+  const deleteMenuResponse = await mileageService.deleteMenu(menuId);
+  const responseStatus = BaseResponseStatus.SUCCESS;
+
+  return res.status(responseStatus.status).json(response(responseStatus, deleteMenuResponse));
 }));
 
 export default router;

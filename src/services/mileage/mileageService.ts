@@ -97,6 +97,18 @@ class MileageService {
 
     return;
   }
+
+  async deleteMenu(menuId: number) {
+    const menu = await MileageMenus.findOne({ menuId: menuId });
+    if(!menu) {
+      throw new HttpError(BaseResponseStatus.UNKNOWN_MENU);
+    }
+
+    menu.isDeleted = true;
+    await menu.save();
+
+    return;
+  }
 }
 
 export default new MileageService();
