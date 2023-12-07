@@ -77,11 +77,36 @@ class PlugService {
       runningHours = Math.floor(timeDiffMinute / 60);
       runningMinutes = timeDiffMinute % 60;
 
-      assignPower = 5.0;
-      usedPower = 3.0;
-      realTimePower = 1.0;
+      assignPower = usePlugLog.assignPower;
+      usedPower = usePlugLog.usedPower;
 
-      //mqtt 연결해서 toggle 얻기
+      const commandTopic = `cmnd/${plug.topic}/CafePlugStatus`;
+      const commandMessage = '0';
+      const resultTopic = `stat/${plug.topic}/RESULT`;
+
+      const response = await new Promise((resolve, reject) => {
+        const timeout = setTimeout(() => {
+          mqttClient.unsubscribe(resultTopic);
+          reject(new HttpError(BaseResponseStatus.OFFLINE_PLUG));
+        }, 5000);
+
+        mqttClient.publish(commandTopic, commandMessage, () => {
+          mqttClient.subscribe(resultTopic);
+
+          mqttClient.on('message', (topic: string, message: Buffer) => {
+            if(topic == resultTopic) {
+              const jsonData = JSON.parse(message.toString());
+              if('power' in jsonData) {
+                toggle = jsonData['toggle'] == 1;
+                realTimePower = jsonData['power'];
+                mqttClient.unsubscribe(resultTopic);
+                clearTimeout(timeout);
+                resolve(JSON.parse(message.toString()));
+              }
+            }
+          });
+        });
+      });
     }
 
     return {
