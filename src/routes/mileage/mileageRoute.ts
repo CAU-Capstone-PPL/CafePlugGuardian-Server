@@ -11,7 +11,7 @@ const router = Router();
  * 마일리지 확인 API
  * get: /api/mileage
  * header: Authorization(jwt 토큰)
- * query: cafeId
+ * query: plugId
  */
 router.get('/', requireToken, wrapAsync(async (req: Request, res: Response) => {
   const userId = req.user.userId;
@@ -21,6 +21,38 @@ router.get('/', requireToken, wrapAsync(async (req: Request, res: Response) => {
   const responseStatus = BaseResponseStatus.SUCCESS;
 
   return res.status(responseStatus.status).json(response(responseStatus, getMileageResponse));
+}));
+
+/**
+ * 마일리지 사용 API
+ * patch: /api/mileage
+ * header: Authorization(jwt 토큰)
+ * query: menuId
+ */
+router.patch('/', requireToken, wrapAsync(async (req: Request, res: Response) => {
+  const userId = req.user.userId;
+  const menuId = Number(req.query.menuId);
+
+  const useMileageResponse = await mileageService.useMileage(userId, menuId);
+  const responseStatus = BaseResponseStatus.SUCCESS;
+
+  return res.status(responseStatus.status).json(response(responseStatus, useMileageResponse));
+}));
+
+/**
+ * 마일리지 부여 테스트 API
+ * patch: /api/mileage/testGain
+ * body: userId, cafeId, mileage
+ */
+router.patch('/testGain', requireToken, wrapAsync(async (req: Request, res: Response) => {
+  const userId = req.body.userId;
+  const cafeId = req.body.cafeId;
+  const mileage = req.body.mileage;
+
+  const testMileageResponse = await mileageService.modifyMileage(userId, cafeId, mileage);
+  const responseStatus = BaseResponseStatus.SUCCESS;
+
+  return res.status(responseStatus.status).json(response(responseStatus, testMileageResponse));
 }));
 
 /**

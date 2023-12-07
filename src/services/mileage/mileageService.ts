@@ -54,6 +54,18 @@ class MileageService {
     return;
   }
 
+  async useMileage(userId: number, menuId: number) {
+    const menu = await MileageMenus.findOne({ menuId: menuId });
+    if(!menu) {
+      throw new HttpError(BaseResponseStatus.UNKNOWN_MENU);
+    }
+    const price = menu.menuPrice * -1;
+
+    await this.modifyMileage(userId, menu.cafeId, price);
+
+    return;
+  }
+
   async getMenu(cafeId: number, plugId: number) {
     const result = [];
 
