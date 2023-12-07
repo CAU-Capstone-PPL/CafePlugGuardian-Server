@@ -33,6 +33,27 @@ class MileageService {
     };
   }
 
+  async modifyMileage(userId: number, cafeId: number, mileage: number) {
+    let mileageData = await UserMileages.findOne({ userId: userId, cafeId: cafeId });
+    if(!mileageData) {
+      const mileage = new UserMileages({
+        userId: userId,
+        cafeId: cafeId,
+        mileage: 0
+      });
+      await mileage.save();
+      mileageData = mileage;
+    }
+
+    if(mileageData.mileage + mileage < 0) {
+      throw new HttpError(BaseResponseStatus.NOT_ENOUGH_MILEAGE);
+    }
+    mileageData.mileage += mileage;
+    await mileageData.save();
+
+    return;
+  }
+
   async getMenu(cafeId: number, plugId: number) {
     const result = [];
 
