@@ -3,6 +3,7 @@ import { Document, Schema, model } from 'mongoose';
 interface IPlugLog extends Document {
   plugUseId: number;
   plugId: number;
+  topic: string;
   plugName: string;
   cafeId: number;
   userId: number;
@@ -11,11 +12,13 @@ interface IPlugLog extends Document {
   endTime: Date;
   assignPower: number;
   usedPower: number;
+  isCheckPermit: boolean;
 }
 
 const plugLogScheme: Schema = new Schema<IPlugLog>({
   plugUseId: { type: Number, required: true, unique: true },
   plugId: { type: Number, required: true },
+  topic: { type: String, required: true },
   plugName: { type: String, required: true },
   cafeId: { type: Number, required: true },
   userId: { type: Number },
@@ -23,7 +26,8 @@ const plugLogScheme: Schema = new Schema<IPlugLog>({
   startTime: { type: Date, required: true },
   endTime: { type: Date },
   assignPower: { type: Number, required: true },
-  usedPower: { type: Number, required: true }
+  usedPower: { type: Number, required: true },
+  isCheckPermit: { type: Boolean, required: true }
 });
 
 const PlugLogs = model<IPlugLog>('plugLogs', plugLogScheme);

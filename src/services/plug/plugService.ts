@@ -179,12 +179,14 @@ class PlugService {
     const plugLog = new PlugLogs({
       plugUseId: plugUseId,
       plugId: plug.plugId,
+      topic: plug.topic,
       plugName: plug.plugName,
       cafeId: plug.cafeId,
       useStatus: plug.useStatus,
       startTime: nowDate,
       assignPower: 0,
-      usedPower: 0
+      usedPower: 0,
+      isCheckPermit: false
     });
     await plugLog.save();
 

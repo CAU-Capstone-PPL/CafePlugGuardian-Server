@@ -1,6 +1,7 @@
 import {connect, MqttClient} from 'mqtt';
 import Plugs from '../models/plugs';
 import axios, {AxiosError, AxiosResponse} from 'axios';
+import PlugLogs from '../models/plugLogs';
 
 let mqttClient: MqttClient;
 const topicPattern = /^stat\/([^\/]+)\/RESULT$/;
@@ -25,7 +26,7 @@ function connectMQTTBroker() {
     //mqttClient.subscribe('+/tasmota_6369CC/+');
   });
 
-  mqttClient.on('message', (topic: string, message: Buffer) => {
+  mqttClient.on('message', async (topic: string, message: Buffer) => {
     console.log(`mqtt 테스트 ${topic}: ${message.toString()}`);
 
     const match = topic.match(topicPattern);
@@ -36,10 +37,21 @@ function connectMQTTBroker() {
         const jsonData = JSON.parse(message.toString());
 
         if('current' in jsonData) {
-          if(jsonData.current > 0.3) {
-            //mqttClient.publish(`cmnd/${device_topic}/SamplingCurrent`, '0');
+          const plugLog = await PlugLogs.findOne({ topic: device_topic, useStatus: true });
+          if(plugLog) {
+            if(jsonData.current >= 0.15) {
+              if(!plugLog.isCheckPermit) {
+                plugLog.isCheckPermit = true;
+                plugLog.save();
+                mqttClient.publish(`cmnd/${device_topic}/SamplingCurrent`, '0');
+              }
+            } else if(jsonData.current < 0.15) {
+              plugLog.isCheckPermit = false;
+              plugLog.save();
+            }
           }
         }
+
         if('current_sampling' in jsonData) {
           const sample = {
             current: jsonData['current_sampling']
