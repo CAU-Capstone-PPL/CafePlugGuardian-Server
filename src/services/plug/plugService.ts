@@ -193,11 +193,46 @@ class PlugService {
       cafeId: plug.cafeId,
       useStatus: plug.useStatus,
       startTime: nowDate,
-      assignPower: 0,
+      assignPower: 50,
       usedPower: 0,
       isCheckPermit: false
     });
     await plugLog.save();
+
+    return;
+  }
+
+  async extendUsePlug(plugId: number, pinNumber: number) {
+    const plug = await Plugs.findOne({ plugId: plugId });
+    if (!plug) {
+      throw new HttpError(BaseResponseStatus.UNKNOWN_PLUG);
+    }
+    if (plug.useStatus) {
+      throw new HttpError(BaseResponseStatus.USED_PLUG);
+    }
+
+    const pin = await Pins.findOne({ pinNumber: pinNumber, cafeId: plug.cafeId, validCount: { $gt: 0 } });
+    if(!pin) {
+      throw new HttpError(BaseResponseStatus.UNKNOWN_PIN);
+    }
+
+    const oneHourAgo = new Date();
+    oneHourAgo.setHours(oneHourAgo.getHours() - 1);
+    if (pin.issueTime.getTime() < oneHourAgo.getTime()) {
+      pin.validCount = 0;
+      await pin.save();
+      throw new HttpError(BaseResponseStatus.UNKNOWN_PIN);
+    }
+
+    const plugLog = await PlugLogs.findOne({ plugId: plugId, useStatus: true });
+    if(!plugLog) {
+      throw new HttpError(BaseResponseStatus.UNKNOWN_PLUG_LOG);
+    }
+    plugLog.assignPower += 50;
+    await plugLog.save();
+
+    pin.validCount--;
+    await pin.save();
 
     return;
   }
@@ -210,6 +245,8 @@ class PlugService {
     } else if(!plug.useStatus) {
       throw new HttpError(BaseResponseStatus.NOT_USED_PLUG);
     }
+    await this.togglePlug(plugId, false);
+
     plug.useStatus = false;
     await plug.save();
 
@@ -217,8 +254,6 @@ class PlugService {
     if(!plugLog) {
       throw new HttpError(BaseResponseStatus.IMPOSSIBLE_ERROR);
     }
-
-    await this.togglePlug(plugId, false);
 
     plugLog.useStatus = false;
     plugLog.endTime = new Date();
