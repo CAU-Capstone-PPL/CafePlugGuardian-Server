@@ -60,13 +60,14 @@ function connectMQTTBroker() {
           if(AIServerURL) {
             axios.post(AIServerURL, sample)
               .then(async (response: AxiosResponse) => {
-                const AIJson = JSON.parse(response.data);
-                if(AIJson['isPermitted'] === 'False') {
+                console.log(response.data);
+                const isPermitted = response.data['isPermitted'];
+                if(isPermitted == 'False') {
                   const plug = await Plugs.findOne({ topic: device_topic });
                   if(plug) {
                     await plugService.togglePlug(plug.plugId, false);
                   }
-                } else if(AIJson['isPermitted'] === 'New Item') {
+                } else if(isPermitted == 'New Item') {
                   const plug = await Plugs.findOne({ topic: device_topic });
                   if(plug) {
                     await plugService.togglePlug(plug.plugId, false);
