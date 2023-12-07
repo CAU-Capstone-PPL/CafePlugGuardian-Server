@@ -3,6 +3,7 @@ import Plugs from '../models/plugs';
 import axios, {AxiosError, AxiosResponse} from 'axios';
 import PlugLogs from '../models/plugLogs';
 import plugService from '../services/plug/plugService';
+import PlugService from '../services/plug/plugService';
 
 let mqttClient: MqttClient;
 const topicPattern = /^stat\/([^\/]+)\/RESULT$/;
@@ -36,11 +37,13 @@ function connectMQTTBroker() {
 
       try {
         const jsonData = JSON.parse(message.toString());
-
         if('current' in jsonData) {
           const plugLog = await PlugLogs.findOne({ topic: device_topic, useStatus: true });
           if(plugLog) {
-            if(jsonData.current >= 0.15) {
+            plugLog.usedPower += jsonData['power'] * 5 / 3600;
+            if(plugLog.usedPower >= plugLog.assignPower) {
+              await PlugService.blockingPlug(plugLog.plugUseId, 'PowerLimit');
+            } else if(jsonData.current >= 0.15) {
               if(!plugLog.isCheckPermit) {
                 plugLog.isCheckPermit = true;
                 await plugLog.save();
@@ -63,14 +66,14 @@ function connectMQTTBroker() {
                 console.log(response.data);
                 const isPermitted = response.data['isPermitted'];
                 if(isPermitted == 'False') {
-                  const plug = await Plugs.findOne({ topic: device_topic });
-                  if(plug) {
-                    await plugService.togglePlug(plug.plugId, false);
+                  const plugLog = await PlugLogs.findOne({ topic: device_topic, useStatus: true });
+                  if(plugLog) {
+                    await PlugService.blockingPlug(plugLog.plugId, 'Blocking');
                   }
                 } else if(isPermitted == 'New Item') {
-                  const plug = await Plugs.findOne({ topic: device_topic });
-                  if(plug) {
-                    await plugService.togglePlug(plug.plugId, false);
+                  const plugLog = await PlugLogs.findOne({ topic: device_topic, useStatus: true });
+                  if(plugLog) {
+                    await PlugService.blockingPlug(plugLog.plugId, 'Blocking');
                   }
                 }
               })

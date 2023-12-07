@@ -225,6 +225,33 @@ class PlugService {
     return;
   }
 
+  async blockingPlug(plugUseId: number, blockingType: string) {
+    const plugLog = await PlugLogs.findOne({ plugUseId: plugUseId });
+    if(!plugLog) {
+      throw new HttpError(BaseResponseStatus.UNKNOWN_PLUG_LOG);
+    }
+
+    const lastBlockingLog = await PlugOffLogs.findOne().sort({ plugOffLogId: -1 });
+    const plugOffLogId = lastBlockingLog ? lastBlockingLog.plugOffLogId + 1 : 1;
+
+    await this.togglePlug(plugLog.plugId, false);
+    const nowDate = new Date();
+
+    const plugOffLog = new PlugOffLogs({
+      plugOffLogId: plugOffLogId,
+      plugUseId: plugUseId,
+      plugId: plugLog.plugId,
+      plugName: plugLog.plugName,
+      type: blockingType,
+      plugOffTime: nowDate,
+      ownerCheck: false,
+      isToggleOn: false
+    });
+    await plugOffLog.save();
+
+    return;
+  }
+
   async getPlugBlockingLog(plugId: number) {
     const plugOffLogs = await PlugOffLogs.find({ plugId: plugId, type: 'Blocking' }).sort({ plugOffTime: -1 }).limit(100);
     const result = [];
