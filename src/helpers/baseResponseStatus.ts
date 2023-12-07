@@ -46,7 +46,10 @@ const BaseResponseStatus: any = {
   //마일리지
   REQUIRE_MENU_CONDITION: { status: 400, success: false, message: 'cafeId 또는 plugId가 필요합니다.' },
   UNKNOWN_MENU: { status: 404, success: false, message: '존재하지 않은 상품입니다.' },
-  NOT_ENOUGH_MILEAGE: { status: 403, success: false, message: '마일리지가 부족합니다.' }
+  NOT_ENOUGH_MILEAGE: { status: 403, success: false, message: '마일리지가 부족합니다.' },
+
+  //로그
+  UNKNOWN_PLUG_OFF_LOG: { status: 404, success: false, message: '존재하지 않은 플러그 강제 종료 로그입니다.' }
 };
 
 export { IBaseResponseStatus, BaseResponseStatus };

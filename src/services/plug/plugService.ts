@@ -215,28 +215,30 @@ class PlugService {
   }
 
   async getPlugBlockingLog(plugId: number) {
-    const plugOffLog = await PlugOffLogs.find({ plugId: plugId, type: 'Blocking' }).sort({ plugOffTime: -1 }).limit(100);
+    const plugOffLogs = await PlugOffLogs.find({ plugId: plugId, type: 'Blocking' }).sort({ plugOffTime: -1 }).limit(100);
     const result = [];
 
-    for(let i = 0; i < plugOffLog.length; i++) {
-      const plugLog = plugOffLog[i];
+    for(let i = 0; i < plugOffLogs.length; i++) {
+      const plugOffLog = plugOffLogs[i];
       const log = {
-        plugId: plugLog.plugId,
-        plugName: plugLog.plugName,
-        type: plugLog.type,
+        plugOffLogId: plugOffLog.plugOffLogId,
+        plugUseId: plugOffLog.plugUseId,
+        plugId: plugOffLog.plugId,
+        plugName: plugOffLog.plugName,
+        type: plugOffLog.type,
         plugOffTime: {
           'date': {
-            'year': plugLog.plugOffTime.getFullYear(),
-            'month': plugLog.plugOffTime.getMonth() + 1,
-            'day': plugLog.plugOffTime.getDate()
+            'year': plugOffLog.plugOffTime.getFullYear(),
+            'month': plugOffLog.plugOffTime.getMonth() + 1,
+            'day': plugOffLog.plugOffTime.getDate()
           },
           'time': {
-            'hours': plugLog.plugOffTime.getHours(),
-            'minutes': plugLog.plugOffTime.getMinutes()
+            'hours': plugOffLog.plugOffTime.getHours(),
+            'minutes': plugOffLog.plugOffTime.getMinutes()
           }
         },
-        ownerCheck: plugLog.ownerCheck,
-        isToggleOn: plugLog.isToggleOn
+        ownerCheck: plugOffLog.ownerCheck,
+        isToggleOn: plugOffLog.isToggleOn
       };
       result.push(log);
     }
@@ -253,24 +255,26 @@ class PlugService {
       const plugOffLogs = await PlugOffLogs.find({ plugUseId: plugUseId }).sort({ plugOffTime: -1 });
 
       for(let i = 0; i < plugOffLogs.length; i++) {
-        const plugLog = plugOffLogs[i];
+        const plugOffLog = plugOffLogs[i];
         const log = {
-          plugId: plugLog.plugId,
-          plugName: plugLog.plugName,
-          type: plugLog.type,
+          plugOffLogId: plugOffLog.plugOffLogId,
+          plugUseId: plugOffLog.plugUseId,
+          plugId: plugOffLog.plugId,
+          plugName: plugOffLog.plugName,
+          type: plugOffLog.type,
           plugOffTime: {
             'date': {
-              'year': plugLog.plugOffTime.getFullYear(),
-              'month': plugLog.plugOffTime.getMonth() + 1,
-              'day': plugLog.plugOffTime.getDate()
+              'year': plugOffLog.plugOffTime.getFullYear(),
+              'month': plugOffLog.plugOffTime.getMonth() + 1,
+              'day': plugOffLog.plugOffTime.getDate()
             },
             'time': {
-              'hours': plugLog.plugOffTime.getHours(),
-              'minutes': plugLog.plugOffTime.getMinutes()
+              'hours': plugOffLog.plugOffTime.getHours(),
+              'minutes': plugOffLog.plugOffTime.getMinutes()
             }
           },
-          ownerCheck: plugLog.ownerCheck,
-          isToggleOn: plugLog.isToggleOn
+          ownerCheck: plugOffLog.ownerCheck,
+          isToggleOn: plugOffLog.isToggleOn
         };
         result.push(log);
       }
