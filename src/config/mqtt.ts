@@ -2,6 +2,7 @@ import {connect, MqttClient} from 'mqtt';
 import Plugs from '../models/plugs';
 import axios, {AxiosError, AxiosResponse} from 'axios';
 import PlugLogs from '../models/plugLogs';
+import plugService from '../services/plug/plugService';
 
 let mqttClient: MqttClient;
 const topicPattern = /^stat\/([^\/]+)\/RESULT$/;
@@ -42,17 +43,15 @@ function connectMQTTBroker() {
             if(jsonData.current >= 0.15) {
               if(!plugLog.isCheckPermit) {
                 plugLog.isCheckPermit = true;
-                plugLog.save();
+                await plugLog.save();
                 mqttClient.publish(`cmnd/${device_topic}/SamplingCurrent`, '0');
               }
             } else if(jsonData.current < 0.15) {
               plugLog.isCheckPermit = false;
-              plugLog.save();
+              await plugLog.save();
             }
           }
-        }
-
-        if('current_sampling' in jsonData) {
+        } else if('current_sampling' in jsonData) {
           const sample = {
             current: jsonData['current_sampling']
           };
@@ -60,8 +59,19 @@ function connectMQTTBroker() {
           const AIServerURL = process.env.AI_SERVER_URL;
           if(AIServerURL) {
             axios.post(AIServerURL, sample)
-              .then((response: AxiosResponse) => {
-                console.log(response.data);
+              .then(async (response: AxiosResponse) => {
+                const AIJson = JSON.parse(response.data);
+                if(AIJson['isPermitted'] === 'False') {
+                  const plug = await Plugs.findOne({ topic: device_topic });
+                  if(plug) {
+                    await plugService.togglePlug(plug.plugId, false);
+                  }
+                } else if(AIJson['isPermitted'] === 'New Item') {
+                  const plug = await Plugs.findOne({ topic: device_topic });
+                  if(plug) {
+                    await plugService.togglePlug(plug.plugId, false);
+                  }
+                }
               })
               .catch((error: AxiosError) => {
                 console.log('AI SERVER ERROR');

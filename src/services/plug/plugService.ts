@@ -142,6 +142,12 @@ class PlugService {
       });
     });
 
+    const plugLog = await PlugLogs.findOne({ plugId: plugId, useStatus: true });
+    if(plugLog) {
+      plugLog.isCheckPermit = !toggle;
+      await plugLog.save();
+    }
+
     return result;
   }
 
