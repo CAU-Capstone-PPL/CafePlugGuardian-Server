@@ -51,6 +51,7 @@ class MileageService {
       });
     }
     userMileage.mileage += addMileage;
+    await userMileage.save();
 
     return;
   }

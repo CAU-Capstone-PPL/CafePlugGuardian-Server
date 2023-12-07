@@ -33,64 +33,57 @@ function connectMQTTBroker() {
     const match = topic.match(topicPattern);
     if(match) {
       const device_topic = match[1];
-
       try {
         const jsonData = JSON.parse(message.toString());
-        if('current' in jsonData) {
-          const plugLog = await PlugLogs.findOne({ topic: device_topic, useStatus: true });
-          if(plugLog) {
-            if(jsonData['toggle'] == 1) {
-              plugLog.usedPower += jsonData['power'] * 5 / 3600;
-              if(plugLog.usedPower >= plugLog.assignPower) {
-                await PlugService.blockingPlug(plugLog.plugUseId, 'PowerLimit');
-              } else if(jsonData.current >= 1.0) {
-                await PlugService.blockingPlug(plugLog.plugUseId, 'Blocking');
-              } else if(jsonData.current >= 0.15) {
-                if(!plugLog.isCheckPermit) {
-                  plugLog.isCheckPermit = true;
-                  await plugLog.save();
-                  mqttClient.publish(`cmnd/${device_topic}/SamplingCurrent`, '0');
-                }
-              } else if(jsonData.current < 0.15) {
-                if(plugLog.isCheckPermit) {
-                  plugLog.isCheckPermit = false;
-                  await plugLog.save();
-                }
+        if('measure_current' in jsonData) {
+          const plugLog = await PlugLogs.findOne({topic: device_topic, useStatus: true});
+          if (plugLog) {
+            plugLog.usedPower += jsonData['measure_power'] * 5 / 3600;
+
+            if (plugLog.usedPower >= plugLog.assignPower) {
+              await PlugService.blockingPlug(plugLog.plugUseId, 'PowerLimit');
+            } else if (jsonData.measure_current >= 1.0) {
+              await PlugService.blockingPlug(plugLog.plugUseId, 'Blocking');
+            } else if (jsonData.measure_current >= 0.2) {
+              if (!plugLog.isCheckPermit) {
+                plugLog.isCheckPermit = true;
+                await plugLog.save();
+                mqttClient.publish(`cmnd/${device_topic}/SamplingCurrent`, '0');
               }
-            } else {
-              if(plugLog.isCheckPermit) {
+            } else if (jsonData.measure_current < 0.2) {
+              if (plugLog.isCheckPermit) {
                 plugLog.isCheckPermit = false;
                 await plugLog.save();
               }
             }
           }
         } else if('current_sampling' in jsonData) {
-          const sample = {
-            current: jsonData['current_sampling']
-          };
+            const sample = {
+              current: jsonData['current_sampling']
+            };
 
-          const AIServerURL = process.env.AI_SERVER_URL;
-          if(AIServerURL) {
-            axios.post(AIServerURL, sample)
-              .then(async (response: AxiosResponse) => {
-                console.log(response.data);
-                const isPermitted = response.data['isPermitted'];
-                if(isPermitted == 'False') {
-                  const plugLog = await PlugLogs.findOne({ topic: device_topic, useStatus: true });
-                  if(plugLog) {
-                    await PlugService.blockingPlug(plugLog.plugId, 'Blocking');
+            const AIServerURL = process.env.AI_SERVER_URL;
+            if(AIServerURL) {
+              axios.post(AIServerURL, sample)
+                .then(async (response: AxiosResponse) => {
+                  console.log(response.data);
+                  const isPermitted = response.data['isPermitted'];
+                  if(isPermitted == 'False') {
+                    const plugLog = await PlugLogs.findOne({ topic: device_topic, useStatus: true });
+                    if(plugLog) {
+                      await PlugService.blockingPlug(plugLog.plugId, 'Blocking');
+                    }
+                  } else if(isPermitted == 'New Item') {
+                    const plugLog = await PlugLogs.findOne({ topic: device_topic, useStatus: true });
+                    if(plugLog) {
+                      await PlugService.blockingPlug(plugLog.plugId, 'Blocking');
+                    }
                   }
-                } else if(isPermitted == 'New Item') {
-                  const plugLog = await PlugLogs.findOne({ topic: device_topic, useStatus: true });
-                  if(plugLog) {
-                    await PlugService.blockingPlug(plugLog.plugId, 'Blocking');
-                  }
-                }
-              })
-              .catch((error: AxiosError) => {
-                console.log('AI SERVER ERROR');
-              });
-          }
+                })
+                .catch((error: AxiosError) => {
+                  console.log('AI SERVER ERROR');
+                });
+            }
         }
       } catch(e) {
       }

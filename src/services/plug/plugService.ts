@@ -86,20 +86,16 @@ class PlugService {
 
       const response = await new Promise((resolve, reject) => {
         const timeout = setTimeout(() => {
-          mqttClient.unsubscribe(resultTopic);
           reject(new HttpError(BaseResponseStatus.OFFLINE_PLUG));
         }, 5000);
 
         mqttClient.publish(commandTopic, commandMessage, () => {
-          mqttClient.subscribe(resultTopic);
-
           mqttClient.on('message', (topic: string, message: Buffer) => {
             if(topic == resultTopic) {
               const jsonData = JSON.parse(message.toString());
-              if('power' in jsonData) {
-                toggle = jsonData['toggle'] == 1;
-                realTimePower = jsonData['power'];
-                mqttClient.unsubscribe(resultTopic);
+              if('status_power' in jsonData) {
+                toggle = jsonData['status_toggle'] == 1;
+                realTimePower = jsonData['status_power'];
                 clearTimeout(timeout);
                 resolve(JSON.parse(message.toString()));
               }
@@ -147,18 +143,14 @@ class PlugService {
 
     const result = await new Promise((resolve, reject) => {
       const timeout = setTimeout(() => {
-        mqttClient.unsubscribe(resultTopic);
         reject(new HttpError(BaseResponseStatus.OFFLINE_PLUG));
       }, 5000);
 
       mqttClient.publish(commandTopic, commandMessage, () => {
-        mqttClient.subscribe(resultTopic);
-
         mqttClient.on('message', (topic: string, message: Buffer) => {
           if(topic == resultTopic) {
             const jsonData = JSON.parse(message.toString());
             if('toggle' in jsonData) {
-              mqttClient.unsubscribe(resultTopic);
               clearTimeout(timeout);
               resolve(JSON.parse(message.toString()));
             }
@@ -168,8 +160,8 @@ class PlugService {
     });
 
     const plugLog = await PlugLogs.findOne({ plugId: plugId, useStatus: true });
-    if(plugLog) {
-      plugLog.isCheckPermit = !toggle;
+    if(plugLog && toggle) {
+      plugLog.isCheckPermit = false;
       await plugLog.save();
     }
 
