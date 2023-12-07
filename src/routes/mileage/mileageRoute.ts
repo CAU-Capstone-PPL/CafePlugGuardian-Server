@@ -40,6 +40,23 @@ router.patch('/', requireToken, wrapAsync(async (req: Request, res: Response) =>
 }));
 
 /**
+ * 잔여 전력 마일리지 전환 API
+ * patch: /api/mileage/remainPower
+ * header: Authorization(jwt 토큰)
+ * body: plugUseId, mileage
+ */
+router.patch('/remainPower', requireToken, wrapAsync(async (req: Request, res: Response) => {
+  const userId = req.user.userId;
+  const plugUseId = req.body.plugUseId;
+  const mileage = req.body.mileage;
+
+  const addRemainPowerMileageResponse = await mileageService.addRemainPowerMileage(userId, plugUseId, mileage);
+  const responseStatus = BaseResponseStatus.SUCCESS;
+
+  return res.status(responseStatus.status).json(response(responseStatus, addRemainPowerMileageResponse));
+}));
+
+/**
  * 마일리지 부여 테스트 API
  * patch: /api/mileage/testGain
  * body: userId, cafeId, mileage

@@ -4,6 +4,7 @@ import {BaseResponseStatus} from '../../helpers/baseResponseStatus';
 import Plugs from '../../models/plugs';
 import MileageMenus from '../../models/mileageMenus';
 import Cafes from '../../models/cafes';
+import PlugLogs from '../../models/plugLogs';
 
 class MileageService {
   async getMileage(userId: number, plugId: number) {
@@ -31,6 +32,27 @@ class MileageService {
       cafeId: mileageData.cafeId,
       mileage: mileageData.mileage
     };
+  }
+
+  async addRemainPowerMileage(userId: number, plugUseId: number, mileage: number) {
+    const plugLog = await PlugLogs.findOne({ plugUseId: plugUseId });
+    if(!plugLog) {
+      throw new HttpError(BaseResponseStatus.UNKNOWN_PLUG_LOG);
+    }
+
+    const addMileage = mileage > 0 ? mileage : 0;
+
+    let userMileage = await UserMileages.findOne({ userId: userId, cafeId: plugLog.cafeId });
+    if(!userMileage) {
+      userMileage = new UserMileages({
+        userId: userId,
+        cafeId: plugLog.cafeId,
+        mileage: 0
+      });
+    }
+    userMileage.mileage += addMileage;
+
+    return;
   }
 
   async modifyMileage(userId: number, cafeId: number, mileage: number) {
