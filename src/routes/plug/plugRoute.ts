@@ -93,6 +93,22 @@ router.post('/:plugId/use', wrapAsync(async (req: Request, res: Response) => {
 }));
 
 /**
+ * 플러그 고객 사용 연장 API
+ * patch: /api/plug/:plugId/use
+ * params: plugId (플러그 식별 번호)
+ * body: pinNumber
+ */
+router.patch('/:plugId/use', wrapAsync(async (req: Request, res: Response) => {
+  const plugId = Number(req.params.plugId);
+  const pinNumber = req.body.pinNumber;
+
+  const extendUsePlugResponse = await PlugService.extendUsePlug(plugId, pinNumber);
+  const responseStatus = BaseResponseStatus.SUCCESS;
+
+  return res.status(responseStatus.status).json(response(responseStatus, extendUsePlugResponse));
+}));
+
+/**
  * 플러그 사용 종료 API
  * patch: /api/plug/:plugId/stop
  * params: plugId (플러그 식별 번호)
