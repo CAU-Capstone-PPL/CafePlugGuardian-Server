@@ -207,9 +207,6 @@ class PlugService {
     if (!plug) {
       throw new HttpError(BaseResponseStatus.UNKNOWN_PLUG);
     }
-    if (plug.useStatus) {
-      throw new HttpError(BaseResponseStatus.USED_PLUG);
-    }
 
     const pin = await Pins.findOne({ pinNumber: pinNumber, cafeId: plug.cafeId, validCount: { $gt: 0 } });
     if(!pin) {
