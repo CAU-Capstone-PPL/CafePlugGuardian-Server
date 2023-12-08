@@ -210,7 +210,7 @@ class PlugService {
       cafeId: plug.cafeId,
       useStatus: plug.useStatus,
       startTime: nowDate,
-      assignPower: 1,
+      assignPower: 3,
       usedPower: 0,
       isCheckPermit: false
     });
@@ -242,7 +242,7 @@ class PlugService {
     if(!plugLog) {
       throw new HttpError(BaseResponseStatus.UNKNOWN_PLUG_LOG);
     }
-    plugLog.assignPower += 1;
+    plugLog.assignPower += 3;
     await plugLog.save();
 
     pin.validCount--;
