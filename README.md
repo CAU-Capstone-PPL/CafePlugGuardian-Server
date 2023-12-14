@@ -60,10 +60,11 @@ The goal of the CafePlugGuardian-Server project is to implement a backend server
 4. Prepare the MQTT broker server
    * In our project, we installed and used an MQTT broker called mosquitto on the same ec2 instance as the backend server.
    * You can install an MQTT broker other than mosquitto, or use a server that provides an MQTT broker.
-5. Clone or Fork CafePlugGuardian-Server
+5. Clone or Fork CafePlugGuardian-Server project
    * Download directly from the environment where you will run the server, or download it locally and set the environment before uploading it.
 6. Set environment with .env file
    * Rename or copy the /src/config/private/.env-sample file to use.
+   * DB, MQTT broker URL, password, encryption key, etc. are stored and used in this file.
    * You can change the name to whatever you want, but the name previously used in the project is as follows.
      * **.env.development.local**: Environment configuration file used when developing locally.
      * **.env.production.local**: Environment configuration file used during deployment.
@@ -76,7 +77,15 @@ The goal of the CafePlugGuardian-Server project is to implement a backend server
    * npm install -g pm2
    * pm2 is a non-stop service based on node.js. Unlike other dependency packages, pm2 must be installed globally, so install it using the above command in the terminal.
 8. Install dependency packages with npm
-   * Install dependency packages using the following command in the project directory in the environment where the server will run.
+   * npm install
+   * Install dependency packages using the above command in the project directory in the environment where the server will run.
+9. Running backend server
+   1. npm start
+      * This command runs the server in the deployment environment.
+      * Runs as an uninterrupted service using pm2.
+   2. npm run dev
+      * This command runs the server in the local development environment.
+      * When developing using nodemon, when you modify the code, it is automatically reflected without the need to turn off and restart the development server.
 
 ## License
 This program is licensed under MIT
